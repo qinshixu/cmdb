@@ -69,20 +69,9 @@ return:
 
 验证token：
 
-curl -k https://10.0.1.148:8888/ -H "Accept: application/x-yaml" -H "X-Auth-Token:bc9b0b2b2ab0286b3eef95b99cd1e44aee4b6cd4"
-clients:
-- _is_master_running
-- local
-- local_async
-- local_batch
-- runner
-- runner_async
-- ssh
-- ssh_async
-- wheel
-- wheel_async
-return: Welcome
-    
+curl -k https://10.0.1.148:8888/ -H "Accept: application/x-yaml" -H "X-Auth-Token:ea513cdcf1a9398ebbb0a81ca06214ee9a42dd4a"  -d client='local' -d tgt='*' -d fun='test.ping'
+return:
+- u1: true
             
   
         
