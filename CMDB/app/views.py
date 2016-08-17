@@ -56,16 +56,20 @@ def login(request):
 def authin(request):
     username = request.POST.get('username','')
     password = request.POST.get('password','')
-    total_idc =Idc.objects.aggregate(Count('idc_name'))
-    idc_num = total_idc["idc_name__count"]
-    user = auth.authenticate(username=username,password=password)
-    total_host = HostList.objects.aggregate(Count('hostname'))
-    host_num = total_host["hostname__count"]
-    if user is not None:
+    if username and password is not  None:
+        total_idc =Idc.objects.aggregate(Count('idc_name'))
+        idc_num = total_idc["idc_name__count"]
+        user = auth.authenticate(username=username,password=password)
+        total_host = HostList.objects.aggregate(Count('hostname'))
+        host_num = total_host["hostname__count"]
+        print request.user,total_idc,idc_num,host_num
+        if user is not None:
             auth.login(request,user)
             return  render_to_response('index.html',{'login_user':request.user,'idc_num':idc_num,'host_num':host_num})
+        else:
+            return render_to_response('login.html',{'login_err':'Wrong username or password!'})
     else:
-            return render_to_response('login.html',{'login_err':'Wrong username or password'})
+        return render_to_response('login.html',{'login_err':'Please input username or password!'})
 @login_required
 def idc(request):
     all_idc = Idc.objects.all()

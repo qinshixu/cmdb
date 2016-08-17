@@ -16,6 +16,7 @@ import MySQLdb
 #f.close()
 ###
 __opts__ = salt.config.client_config('/etc/salt/master')
+#print __opts__['mysql.host'],__opts__['mysql.user'],__opts__['mysql.pass'],__opts__['mysql.db'],__opts__['mysql.port']
 
 # Create MySQL connect
 conn = MySQLdb.connect(host=__opts__['mysql.host'], user=__opts__['mysql.user'], passwd=__opts__['mysql.pass'], db=__opts__['mysql.db'], port=__opts__['mysql.port'])
