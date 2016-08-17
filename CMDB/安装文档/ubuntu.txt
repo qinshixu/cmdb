@@ -66,6 +66,22 @@ return:
   start: 1471421566.583053
   token: bc9b0b2b2ab0286b3eef95b99cd1e44aee4b6cd4
   user: xiaoluo
+
+验证token：
+
+curl -k https://10.0.1.148:8888/ -H "Accept: application/x-yaml" -H "X-Auth-Token:bc9b0b2b2ab0286b3eef95b99cd1e44aee4b6cd4"
+clients:
+- _is_master_running
+- local
+- local_async
+- local_batch
+- runner
+- runner_async
+- ssh
+- ssh_async
+- wheel
+- wheel_async
+return: Welcome
     
             
   
