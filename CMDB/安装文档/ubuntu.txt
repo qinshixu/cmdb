@@ -17,6 +17,11 @@ apt-get update
         default_include: master.d/*.conf
         interface: 0.0.0.0
         auto_accept: True
+        mysql.user: root
+        mysql.port: 3306
+        mysql.db : cmdb
+        mysql.pass: '123456'
+        mysql.host: '127.0.0.1'
     cd /etc/salt/master.d/
     vim api.conf
       rest_cherrypy:
