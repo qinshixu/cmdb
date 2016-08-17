@@ -1,0 +1,75 @@
+1.基本依赖关系安装
+apt-get install libmysqld-dev python-dev  libxml2-dev libxslt1-dev -y
+pip2 install MySQL-python 
+pip install south
+pip install 'django==1.6.5' 
+pip install cherrypy==3.2.3
+
+2.salt 和 salt-api 安装
+apt-get install python-software-properties
+add-apt-repository  ppa:saltstack/salt
+apt-get update
+服务端：
+     useradd -M -s /sbin/nologin xiaoluo
+     passwd xiaoluo
+    apt-get install salt-master salt-api -y 
+    vim /etc/master 
+        default_include: master.d/*.conf
+        interface: 0.0.0.0
+        auto_accept: True
+    cd /etc/salt/master.d/
+    vim api.conf
+      rest_cherrypy:
+        port: 8888
+        ssl_crt: /etc/pki/tls/certs/localhost.crt
+        ssl_key: /etc/pki/tls/certs/localhost.key
+    vim external_auth:
+      pam:
+         xiaoluo:
+            - .*
+            - '@wheel'
+            - '@runner'
+    启动salt 和salt-api 服务 
+        /etc/init.d/salt-api  start
+        /etc/init.d/salt-master start
+    查看端口：
+      netstat -ntpl | grep 8888
+客户端：
+  apt-get install python-software-properties
+  add-apt-repository  ppa:saltstack/salt
+  apt-get update
+  apt-get install salt-minion -y 
+  修改配置文件：
+    vim /etc/salt/minion
+      master: 10.0.1.148
+      id: u1    ##客户端识别id
+  启动服务
+      /etc/init.d/salt-minion start
+      
+  服务端进行验证：
+    salt-key  -L   ＃＃已识别客户端u1
+        Accepted Keys:
+          u1
+        Denied Keys:
+        Unaccepted Keys:
+        Rejected Keys:
+  api 接口验证： （客户端和服务端都可以验证）
+    root@U2:/etc/salt/master.d# curl -k https://10.0.1.148:8888/login -H "Accept: application/x-yaml"  -d username='xiaoluo' -d password='123456' -d eauth='pam'
+
+return:
+- eauth: pam
+  expire: 1471464766.583054
+  perms:
+  - .*
+  - '@wheel'
+  - '@runner'
+  start: 1471421566.583053
+  token: bc9b0b2b2ab0286b3eef95b99cd1e44aee4b6cd4
+  user: xiaoluo
+    
+            
+  
+        
+      
+
+
