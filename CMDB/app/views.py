@@ -47,6 +47,8 @@ def date_result(data):
 @login_required
 def index(request): 
     total_idc =Idc.objects.aggregate(Count('idc_name'))
+    #for k,v in total_idc.items():
+    #    print k,v
     idc_num = total_idc["idc_name__count"]
     total_host = HostList.objects.aggregate(Count('hostname'))
     host_num = total_host["hostname__count"]
@@ -62,7 +64,7 @@ def authin(request):
         user = auth.authenticate(username=username,password=password)
         total_host = HostList.objects.aggregate(Count('hostname'))
         host_num = total_host["hostname__count"]
-        print request.user,total_idc,idc_num,host_num
+        print request.user,user,total_idc,idc_num,host_num
         if user is not None:
             auth.login(request,user)
             return  render_to_response('index.html',{'login_user':request.user,'idc_num':idc_num,'host_num':host_num})

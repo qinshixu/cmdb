@@ -11,7 +11,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-     <title>Lmanage</title> 
+     <title>云信运维平台CMDB</title> 
 
     <!-- Bootstrap Core CSS -->
     <link href="http://cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
@@ -30,7 +30,32 @@ div.dataTables_length label {
     text-align: left;
     white-space: nowrap;
 }
-
+/*二级菜单*/
+.menu-second li a{
+    background-color: #FFFFF0;
+    font-size: 14px;
+    line-height: 31px;
+    padding:0;
+    margin:0;
+}
+/*二级菜单鼠标划过样式*/
+.menu-second li a:hover {
+    text-decoration: none;
+    background-color: #d6d4d5;
+    border-top: 1px solid #b7b7b7;
+    border-bottom: 1px solid #acacac;
+}
+/*二级菜单选中状态*/
+.menu-second-selected {
+    background-color: #66c3ec;
+    height:31px;
+    line-height:31px;
+    border-top: 1px solid #83ceed;
+    border-bottom: 1px solid #83ceed;
+    border-right: 3px solid #f8881c;
+    border-left: 3px solid #66c3ec;
+    text-align:center;
+}
 div.dataTables_length select {
     width: 75px;
     display: inline-block;
@@ -347,7 +372,7 @@ div.FixedHeader_Cloned table {
     position: absolute;
     height: 2px;
     top:0px;
-    background: #337ab7;
+    background: #FFF0F5;
     width: 0%;
     z-index: 2000;
 }
@@ -375,7 +400,7 @@ div.FixedHeader_Cloned table {
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-	       <img src="/static/dist/img/CMDB1.png" height="50px"/>
+               <a href="https://www.creditcloud.com"><img src="/static/dist/img/CMDB1.png" height="50px" width=170px/  border="0"></a>
             </div>
             <!-- /.navbar-header -->
 
@@ -387,7 +412,7 @@ div.FixedHeader_Cloned table {
                     </a>
                     <ul class="dropdown-menu dropdown-tasks">
                         <li>
-                            <a href="#">
+                            <a href="/job/">
                                 <div>
                                     <p>
                                         <strong>任务1</strong>
@@ -403,15 +428,15 @@ div.FixedHeader_Cloned table {
                         </li>
                         <li class="divider"></li>
                         <li>
-                            <a href="#">
+                            <a href="/job/">
                                 <div>
                                     <p>
                                         <strong>任务 2</strong>
-                                        <span class="pull-right text-muted">20% </span>
+                                        <span class="pull-right text-muted">50% </span>
                                     </p>
                                     <div class="progress progress-striped active">
-                                        <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
-                                            <span class="sr-only">20% Complete</span>
+                                        <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 50%">
+                                            <span class="sr-only">50% Complete</span>
                                         </div>
                                     </div>
                                 </div>
@@ -420,7 +445,7 @@ div.FixedHeader_Cloned table {
                         
                         <li class="divider"></li>
                         <li>
-                            <a class="text-center" href="#">
+                            <a class="text-center" href="/job">
                                 <strong>查看全部</strong>
                                 <i class="fa fa-angle-right"></i>
                             </a>
@@ -485,37 +510,46 @@ div.FixedHeader_Cloned table {
                 <div class="sidebar-nav navbar-collapse">
                     <ul class="nav" id="side-menu">
                         <li>
-                            <a href="/index"><i class="fa fa-dashboard fa-fw"></i> 控制台</a>
+                            <a href="/index"><i class="fa  fa-home fa-fw"></i> 控制台</a>
                         </li>
                         <li>
-                            <a href="/idc"><i class="fa fa-tasks fa-fw"></i>机房管理</a>
+                            <a href="/idc"><i class="fa fa-cloud fa-fw"></i>机房管理</a>
                         </li>
 			<li>
-                            <a href="/mac"><i class="fa fa-tasks fa-fw"></i>主机管理</a>
+                            <a href="/mac"><i class="fa fa-laptop fa-fw"></i>主机管理</a>
                         </li>
 			<li>
-			    <a href="/asset"><i class="fa fa-tasks fa-fw"></i>资产审计</a> 
+			    <a href="/asset"><i class="fa fa-pencil-square fa-fw"></i>资产审计</a> 
 			</li>
                         <li>
-                            <a href="/asset_auto"><i class="fa fa-tasks fa-fw"></i>资产采集</a>
+                            <a href="/asset_auto"><i class="fa fa-filter fa-fw"></i>资产采集</a>
                         </li>
 			<li>
-                            <a href="/group"><i class="fa fa-support fa-fw"></i>分组管理</a>
+                            <a href="/group"><i class="fa fa-sort-amount-asc fa-fw"></i>分组管理</a>
                         </li>
 			<li>
-                            <a href="/file"><i class="fa fa-support fa-fw"></i>文件推送</a>
+                            <a href="/file"><i class="fa fa-share-square  fa-fw"></i>文件推送</a>
                         </li>
 			<li>
-                            <a href="/command"><i class="fa fa-support fa-fw"></i>单台命令</a>
+                            <a href="/command"><i class="fa  fa-arrow-circle-o-right fa-fw"></i>单台命令</a>
                         </li>
                         <li>
-                            <a href="/command_group"><i class="fa fa-support fa-fw"></i>批量命令</a>
+                            <a href="/command_group"><i class="fa fa-tasks fa-fw"></i>批量命令</a>
                         </li>
 			<li>
                             <a href="/job"><i class="fa fa-support fa-fw"></i>任务流程</a>
                         </li>
 			<li>
-                            <a href="/monitor"><i class="fa fa-support fa-fw"></i>监控处理</a>
+                            <a href="/monitor"><i class="fa fa-dashboard  fa-fw"></i>监控处理</a>
+                        </li>
+			<li>
+                            <a href="#"><i class="fa fa-user  fa-fw"></i>用户管理</a>
+			    <ul id="userMeun" class="menu-second">
+       				<li style="list-style-type:none"><a href="#"><i class="fa fa-support fa-fw"></i> 增加用户</a></li>
+        			<li style="list-style-type:none"><a href="#"><i class="fa fa-support fa-fw"></i> 修改用户</a></li>
+        			<li style="list-style-type:none"><a href="#"><i class="fa fa-support fa-fw"></i> 删除用户</a></li>
+        			<li style="list-style-type:none"><a href="#"><i class="fa fa-support fa-fw"></i> 用户列表</a></li>
+			   </ul>
                         </li>
 
 <!--                         <li>
