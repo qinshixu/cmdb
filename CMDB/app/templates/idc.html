@@ -22,6 +22,33 @@
     <!-- Custom Fonts -->
     <link href="http://cdn.bootcss.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     <style>
+/*二级菜单*/
+.menu-second li a{
+    background-color: #FFFFF0;
+    font-size: 14px;
+    line-height: 31px;
+    padding:0;
+    margin:0;
+}
+/*二级菜单鼠标划过样式*/
+.menu-second li a:hover {
+    text-decoration: none;
+    background-color: #d6d4d5;
+    border-top: 1px solid #b7b7b7;
+    border-bottom: 1px solid #acacac;
+}
+/*二级菜单选中状态*/
+.menu-second-selected {
+    background-color: #66c3ec;
+    height:31px;
+    line-height:31px;
+    border-top: 1px solid #83ceed;
+    border-bottom: 1px solid #83ceed;
+    border-right: 3px solid #f8881c;
+    border-left: 3px solid #66c3ec;
+    text-align:center;
+}
+
 div.dataTables_length label {
     font-weight: normal;
     text-align: left;
@@ -492,34 +519,46 @@ div.FixedHeader_Cloned table {
                 <div class="sidebar-nav navbar-collapse">
                     <ul class="nav" id="side-menu">
 			<li>
-                            <a href="/index"><i class="fa fa-dashboard fa-fw"></i> 控制台</a>
+                            <a href="/index"><i class="fa  fa-home fa-fw"></i> 控制台</a>
                         </li>
                         <li>
-                            <a href="/idc"><i class="fa fa-tasks fa-fw"></i>机房管理</a>
+                            <a href="/idc"><i class="fa fa-cloud fa-fw"></i>机房管理</a>
+                        </li>
+			<li>
+                            <a href="/mac"><i class="fa fa-laptop fa-fw"></i>主机管理</a>
+                        </li>
+			<li>
+			    <a href="/asset"><i class="fa fa-pencil-square fa-fw"></i>资产审计</a> 
+			</li>
+                        <li>
+                            <a href="/asset_auto"><i class="fa fa-filter fa-fw"></i>资产采集</a>
+                        </li>
+			<li>
+                            <a href="/group"><i class="fa fa-sort-amount-asc fa-fw"></i>分组管理</a>
+                        </li>
+			<li>
+                            <a href="/file"><i class="fa fa-share-square  fa-fw"></i>文件推送</a>
+                        </li>
+			<li>
+                            <a href="/command"><i class="fa  fa-arrow-circle-o-right fa-fw"></i>单台命令</a>
                         </li>
                         <li>
-                            <a href="/mac"><i class="fa fa-tasks fa-fw"></i>主机管理</a>
+                            <a href="/command_group"><i class="fa fa-tasks fa-fw"></i>批量命令</a>
                         </li>
-                        <li>
-                            <a href="/asset"><i class="fa fa-tasks fa-fw"></i>资产审计</a>
-                        </li>
-                        <li>
-                            <a href="/asset_auto"><i class="fa fa-tasks fa-fw"></i>资产采集</a>
-                        </li>
-                        <li>
-                            <a href="/group"><i class="fa fa-support fa-fw"></i>分组管理</a>
-                        </li>
-                        <li>
-                            <a href="/file"><i class="fa fa-support fa-fw"></i>文件推送</a>
-                        </li>
-                        <li>
-                            <a href="/command"><i class="fa fa-support fa-fw"></i>单台命令</a>
-                        </li>
-                        <li>
-                            <a href="/command_group"><i class="fa fa-support fa-fw"></i>批量命令</a>
-                        </li>
-                        <li>
+			<li>
                             <a href="/job"><i class="fa fa-support fa-fw"></i>任务流程</a>
+                        </li>
+			<li>
+                            <a href="/monitor"><i class="fa fa-dashboard  fa-fw"></i>监控处理</a>
+                        </li>
+			<li>
+                            <a href="#"><i class="fa fa-user  fa-fw"></i>用户管理</a>
+			    <ul id="userMeun" class="menu-second">
+       				<li style="list-style-type:none"><a href="#"><i class="fa fa-support fa-fw"></i> 增加用户</a></li>
+        			<li style="list-style-type:none"><a href="#"><i class="fa fa-support fa-fw"></i> 修改用户</a></li>
+        			<li style="list-style-type:none"><a href="#"><i class="fa fa-support fa-fw"></i> 删除用户</a></li>
+        			<li style="list-style-type:none"><a href="#"><i class="fa fa-support fa-fw"></i> 用户列表</a></li>
+			   </ul>
                         </li>
 <!--                         <li>
                             <a href="/chart"><i class="fa fa-bar-chart-o fa-fw"></i> 图表<span class="fa arrow"></span></a>
@@ -551,8 +590,11 @@ div.FixedHeader_Cloned table {
     <label for="exampleInputEmail2">备注</label>
     <input type="text" class="form-control"  id="msgInput">
   </div>
-  <button type="button" class="btn btn-default" onclick="cmdrun(this);">添加</button>
+  <button type="button" class="btn  btn-default btn-success"   style="color:bule" onclick="cmdrun(this);">添加</button>
 </form>
+<div style="color:#F00" text-align:'center' id='errorMsg'>
+
+</div>
 <!--
 <script type="text/javascript">
 
@@ -571,6 +613,7 @@ function cmdrun(ele){
 
 </script>
 -->
+
 <div class="row">
                 <div class="col-lg-12">
                     <div class="panel panel-default" style='margin-top:20px;'>
@@ -596,11 +639,16 @@ function cmdrun(ele){
 	<td>{{all_idc.idc_name}}</td>
 	<td>{{all_idc.remark}}</td>
 	<td>
-<span class="label label-primary hover deleteidc"><a href="/idc/idc_delete/?id={{ all_idc.id }}" style="color:white"  role="button">删除</a></span>
-<span class="label label-primary hover" data-id='6'>
-	<a href="/mac/check_host/?idc_name={{all_idc.idc_name}}" style='color:white'>查看</a>
-</span>
-
+		<span class="label label-primary hover" data-id='6'>
+		<a style='color:white'  onClick="del_idc('/idc/idc_delete/?id={{ all_idc.id }}');">删除</a> 
+                </span>&nbsp;&nbsp;
+                
+		<span class="label label-primary hover" data-id='6'>
+			<a href="/mac/check_host/?idc_name={{all_idc.idc_name}}" style='color:white'>查看</a>
+		</span>&nbsp;&nbsp;
+		<span class="label label-primary hover" data-id='6'>
+		<a style='color:white'  onClick="update_idc('{{ all_idc.idc_name }}')";">编辑</a> 
+                </span>&nbsp;&nbsp;
 	</td>
 </tr>
           {%endfor%}
@@ -621,7 +669,7 @@ function cmdrun(ele){
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title">Modal title</h4>
       </div>
-      <div class="modal-body">
+      <div classp;"modal-body">
         <p>One fine body&hellip;</p>
       </div>
       <div class="modal-footer">
@@ -642,14 +690,16 @@ function cmdrun(ele){
 
     </div>
     <!-- /#wrapper -->
-<div class="modal fade" id='tipModal'>
+
+<!--添加失败 弹窗-->
+<div class="modal fade" id='tipModal2'>
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Modal title</h4>
+        <h4 class="modal-title">添加失败</h4>
       </div>
-      <div class="modal-body">
+      <div class="modal-body" style="color:#F00">
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">确认</button>
@@ -657,6 +707,69 @@ function cmdrun(ele){
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+
+<!-- 添加成功的弹窗-->
+<div class="modal fade" id='tipModal'>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">成功</h4>
+      </div>
+      <div class="modal-body">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" data-dismiss="modal">确认</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!--删除按钮弹窗-->
+<div class="modal fade" id="tipModal3">  
+  <div class="modal-dialog">  
+    <div class="modal-content message_align">  
+      <div class="modal-header">  
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>  
+        <h4 class="modal-title">提示信息</h4>  
+      </div>  
+      <div class="modal-body">  
+        <p>您确认要删除吗？</p>  
+      </div>  
+      <div class="modal-footer">  
+         <input type="hidden" id="url"/>  
+         <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>  
+         <a  onclick="urlSubmit()" class="btn btn-success" data-dismiss="modal">确定</a>
+      </div>  
+    </div><!-- /.modal-content -->  
+  </div><!-- /.modal-dialog -->  
+</div><!-- /.modal --> 
+<!--修改idc名称及备注-->
+<div class="modal fade" id="tipModal4">
+  <div class="modal-dialog">
+    <div class="modal-content message_align">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+      <h4 class="modal-title">修改内容</h4>
+      </div>
+      <div class="modal-body">
+      <form class="form-inline"  method="post" action="/idc/idc_update/">
+      <div class="form-group">
+      <label for="exampleInputName2">备注</label>
+      <input type="text" class="form-control"  name="msgInput">
+      <input type="hidden" class="form-control id" value=''  name="id">
+      </div>
+      <div class="modal-footer">
+         <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+         <a  onclick="urlupdate()" class="btn btn-success" data-dismiss="modal">保存</a>
+      </div>
+      </form>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
     <!-- jQuery -->
     <script src="http://cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
     <script src="/static/js/jquery.js"></script>
@@ -761,10 +874,34 @@ function cmdrun(ele){
      if (data=='ok') {
      $('#tipModal').find('.modal-body').html('添加成功').end().modal('show')
            } 
+     if (data=='exist') {
+     $('#tipModal2').find('.modal-body').html('idc名称已存在').end().modal('show')
+           } 
       }
     
 });
-}}   
+  }
+    else{
+        $('#errorMsg').html('*请输入idc名称和备注*')
+    }
+
+}
+function del_idc(url){
+     $('#url').val(url);
+     $('#tipModal3').modal('show')
+}   
+function urlSubmit(){
+    var url=$.trim($("#url").val());
+    window.location.href=url;
+}
+function update_idc(url){
+    $('#url').val(url);
+    $('.form-inline .id').val(url);
+    $('#tipModal4').modal('show')
+}
+function urlupdate(){
+    $('.form-inline').submit();
+}
 </script>
 </body>
 

@@ -79,16 +79,37 @@ def idc(request):
 @login_required
 def addidc(request):
     nameInput = request.GET['nameInput'] 
-    msgInput = request.GET['msgInput'] 
-    idc_add = Idc(idc_name=nameInput,remark=msgInput)
-    idc_add.save()
-    return HttpResponse('ok')
+    msgInput = request.GET['msgInput']
+    all_idc = Idc.objects.all()
+    idc_name_list=[]
+    for i in all_idc:
+        idc_name_list.append(i.idc_name)
+    print idc_name_list
+    if nameInput in idc_name_list:
+        return HttpResponse('exist')
+    else: 
+        idc_add = Idc(idc_name=nameInput,remark=msgInput)
+        idc_add.save()
+        return HttpResponse('ok')
+        
 @login_required
 def idc_delete(request,id=None):
     if request.method == 'GET':
         id = request.GET.get('id')
         Idc.objects.filter(id=id).delete()
         return HttpResponseRedirect('/idc/')
+@login_required
+def idc_update(request):
+    if request.method == 'POST':
+        remark=request.POST.get('msgInput')
+        name=request.POST.get('id')
+        print name,remark
+        a=Idc.objects.get(idc_name=name)
+        a.remark=remark
+        a.save()
+        return HttpResponseRedirect('/idc/')
+        
+        
 @login_required
 def mac(request):
     all_host = HostList.objects.all()
