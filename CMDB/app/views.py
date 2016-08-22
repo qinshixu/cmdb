@@ -357,19 +357,24 @@ def group_manage(request,id=None):
         return render_to_response("group_manage.html",locals())
 @login_required
 def group_manage_delete(request,group_name=None,ip=None):
-    if request.method == 'GET':
-	group_name = request.GET.get('group_name')
-	ip = request.GET.get('ip')
-	all_group = Group.objects.filter(name=group_name)
-	all_host = HostList.objects.filter(ip=ip)
-	for group in all_group:
-	    group_id= group.id 
-	for host in all_host:
-	    host_id= host.id
-	h = HostList.objects.get(id=host_id)
-	g = Group.objects.get(id=group_id)
-	h.group.remove(g)
-	return HttpResponse('ok')
+#    if request.method == 'GET':
+#	group_name = request.GET.get('group_name')
+#	ip = request.GET.get('ip')
+        group_name = request.GET['group_name']
+        ip = request.GET['ip']
+        try:
+	    all_group = Group.objects.filter(name=group_name)
+	    all_host = HostList.objects.filter(ip=ip)
+	    for group in all_group:
+	        group_id= group.id 
+	    for host in all_host:
+	        host_id= host.id
+            h = HostList.objects.get(id=host_id)
+            g = Group.objects.get(id=group_id)
+	    h.group.remove(g)
+	    return HttpResponse('ok')
+        except:
+            return HttpResponse('false')
 @login_required
 def addgroup_host(request):
     if request.method == 'GET':

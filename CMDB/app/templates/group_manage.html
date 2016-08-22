@@ -575,8 +575,12 @@ div.FixedHeader_Cloned table {
 	<td id = "groupname">{{group_name}}</td>
 	<td id = "host">{{ip}}</td>
 	<td>
-
+<span class="label label-primary hover" data-id='6'>
+<a style='color:white'  onClick="del_group_host('{{group_name}}','{{ ip }}');">删除</a>
+</span>
+<!--
 <span class="label label-primary hover deleteidc"><a href="/group_manage/group_manage_delete/?group_name={{group_name}}&ip={{ ip }}" style="color:white"  role="button">删除</a></span>
+-->
 <!--
 <span class="label label-primary hover" data-id='6'>
 	<a href="/mac/check_host/?idc_name={{all_idc.idc_name}}" style='color:white'>查看</a>
@@ -764,7 +768,22 @@ function deletegroup_host(ele){
       }
     
 });
-}   
+}
+  
+function del_group_host(group_name,ip){
+    $.ajax({  
+        url:"/group_manage/group_manage_delete", 
+        data:{group_name:group_name,ip:ip},
+        success:function(data){
+        if (data=='ok') {
+             $('#tipModal').find('.modal-body').html('删除成功').end().modal('show');
+             }
+        else {
+	     $('#tipModal').find('.modal-body').html('删除失败').end().modal('show');	
+	 }
+        } 
+   });
+}
 </script>
 
 
