@@ -339,15 +339,14 @@ def group_result(request):
 	return HttpResponse("ok")
 @login_required
 def group_delete(request,id=None):
-    if request.method == 'GET':
-        id = request.GET.get('id')
-        group_id = Group.objects.get(id=id)
-        all_ip=group_id.hostlist_set.all()
-        if all_ip:
-            return HttpResponse('exist')
-        else:
-            Group.objects.filter(id=id).delete()
-            return HttpResponseRedirect('/group/')
+    id = request.GET['id']
+    group_id = Group.objects.get(id=id)
+    all_ip=group_id.hostlist_set.all()
+    if all_ip:
+        return HttpResponse('exist')
+    else:
+        Group.objects.filter(id=id).delete()
+        return HttpResponse('ok')
 @login_required
 def group_manage(request,id=None):
     if request.method == 'GET':
