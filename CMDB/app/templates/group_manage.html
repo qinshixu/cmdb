@@ -542,7 +542,7 @@ div.FixedHeader_Cloned table {
 <form class="form-inline"  method="post">
   <div class="form-group">
     <label for="exampleInputName2">组名</label>
-    <input type="text" class="form-control" id="nameInput" value="{{group_name}}">
+    <input type="text" class="form-control" id="nameInput" value="{{group_name}}" readonly>
   </div>
   <div class="form-group">
     <label for="exampleInputEmail2">IP</label>
@@ -741,6 +741,9 @@ function addgroup_host(ele){
      if (data=='ok') {
      $('#tipModal').find('.modal-body').html('添加成功').end().modal('show')
            } 
+     else{
+	$('#tipModal').find('.modal-body').html('ip不在主机列表中').end().modal('show')
+	}
       }
     
 });

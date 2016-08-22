@@ -9,7 +9,7 @@ from django.contrib import auth
 from django import  forms
 from app.models import *
 from app.backend.saltapi  import SaltAPI
-from app.backend.asset_info import *
+from app.backend.asset_info import get_server_asset_info
 import MySQLdb as mysql
 import  ConfigParser,sys,json,os,time,pickle
 db = mysql.connect(user="root", passwd="123456", db="monitor", charset="utf8")
@@ -24,6 +24,7 @@ def saltstack():
     passwd = config.get("saltstack","pass")
     device = config.get("network","device")
     result_api={'url':url,'user':user,'passwd':passwd,'device':device}
+    print result_api
     return result_api
 def wirte_track_mark(num):
     f = open("/web/CMDB/app/backend/track_num.conf",'w')
@@ -298,7 +299,7 @@ def asset_auto_result(request):
 	ret_api = saltstack()
 	try:
 	    client = request.GET.get('client')
-            result = get_server_asset_info(client,ret_api["url"],ret_api["user"],ret_api["passwd"],ret_api["device"]) 
+            result = get_server_asset_info(client,ret_api["url"],ret_api["user"],ret_api["passwd"],ret_api["device"])
             result_data = ServerAsset()
             result_data.manufacturer = result[0][0]
             result_data.productname = result[0][1]
@@ -340,8 +341,13 @@ def group_result(request):
 def group_delete(request,id=None):
     if request.method == 'GET':
         id = request.GET.get('id')
-        Group.objects.filter(id=id).delete()
-        return HttpResponseRedirect('/group/')
+        group_id = Group.objects.get(id=id)
+        all_ip=group_id.hostlist_set.all()
+        if all_ip:
+            return HttpResponse('exist')
+        else:
+            Group.objects.filter(id=id).delete()
+            return HttpResponseRedirect('/group/')
 @login_required
 def group_manage(request,id=None):
     if request.method == 'GET':
@@ -374,12 +380,15 @@ def addgroup_host(request):
         all_host = HostList.objects.filter(ip=ip)
 	for group in all_group:
             group_id= group.id
-        for host in all_host:
-            host_id= host.id
-        h = HostList.objects.get(id=host_id)
-        g = Group.objects.get(id=group_id)
-	h.group.add(g)
-	return HttpResponse('ok')
+        try:
+            for host in all_host:
+                host_id= host.id
+            h = HostList.objects.get(id=host.id)
+            g = Group.objects.get(id=group_id)
+	    h.group.add(g)
+	    return HttpResponse('ok')
+        except:
+            return HttpResponse('false')
 def monitor(request):
     data = []
     host = []

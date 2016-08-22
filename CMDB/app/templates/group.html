@@ -538,6 +538,8 @@ div.FixedHeader_Cloned table {
     <input type="text" class="form-control" id="g_name">
   </div>
   <button type="button" class="btn btn-default" onclick="grouprun(this);">添加</button>
+  <div style="color:#F00" text-align:'center' id='errorMsg'>
+  </div>
 </form>
 <div class="row">
                 <div class="col-lg-12">
@@ -729,7 +731,11 @@ function grouprun(ele){
       }
     
 });
-}}   
+	}
+else{
+        $('#errorMsg').html('*请输入组名*')
+	}   
+}
 </script>
 </body>
 

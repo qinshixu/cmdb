@@ -3,6 +3,8 @@ from saltapi import SaltAPI
 import threading
 import ConfigParser
 asset_info = []
+
+
 def get_server_asset_info(tgt,url,user,passwd,device):
     '''
     Salt API得到资产信息，进行格式化输出
@@ -13,6 +15,8 @@ def get_server_asset_info(tgt,url,user,passwd,device):
     info = []
     sapi = SaltAPI(url=url,username=user,password=passwd)
     ret = sapi.remote_noarg_execution(tgt,'grains.items')
+    ret2 = sapi.remote_noarg_execution(tgt,'status.diskusage')
+    disk=(ret2['/']['total']/(1000*1000))/1000.0
     manufacturer = ret['manufacturer']
     info.append(manufacturer)
     productname = ret['productname']
@@ -25,9 +29,8 @@ def get_server_asset_info(tgt,url,user,passwd,device):
     info.append(num_cpus)
     num_gpus = int(ret['num_gpus'])
     info.append(num_gpus)
-    mem_total = ret['mem']
+    mem_total = ret['mem_total']
     info.append(mem_total)
-    disk  = ret['disk']
     info.append(disk)
     id = ret['id']
     info.append(id)
@@ -38,4 +41,4 @@ def get_server_asset_info(tgt,url,user,passwd,device):
     asset_info.append(info)
     return asset_info
 if __name__ == '__main__':
-    print get_server_asset_info('client','https://192.168.63.89:8888','xiaoluo','123456','eth0')
+    print get_server_asset_info('u1','https://10.0.1.148:8888','xiaoluo','123456','eth0')

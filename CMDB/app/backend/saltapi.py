@@ -14,6 +14,7 @@ class SaltAPI(object):
         self.__url = url.rstrip('/')
         self.__user = username
         self.__password = password
+        print self.__url,self.__user,self.__password
 
     def token_id(self):
         ''' user login and get token id '''
@@ -114,7 +115,7 @@ class SaltAPI(object):
         return jid
 
 def main():
-    sapi = SaltAPI(url='https://192.168.63.89:8888',username='xiaoluo',password='123456')
+    sapi = SaltAPI(url='https://127.0.0.1:8888',username='xiaoluo',password='123456')
     #sapi.token_id()
     #print sapi.list_all_key()
     #sapi.delete_key('test-01')
