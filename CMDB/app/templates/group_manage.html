@@ -2,13 +2,16 @@
 <html lang="en">
 
 <head>
+<!--
+<link href="http://51reboot.com/static/images/favicon.ico" type="image/x-icon" rel="shortcut icon">
+-->
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Lmanage</title>
+     <title>云信运维平台CMDB</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="http://cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
@@ -27,6 +30,71 @@ div.dataTables_length label {
     text-align: left;
     white-space: nowrap;
 }
+.sidebar {
+    z-index: 1;
+    position: absolute;
+    width: 250px;
+    margin-top: 51px;
+}
+.aa {
+text-align:left;
+}
+
+/*一级菜单*/
+.menu-first{
+    height:45px;
+    line-height:45px;
+    background-color: #e9e9e9;
+    border-top: 1px solid #efefef;
+    border-bottom: 1px solid #e1e1e1;
+    padding: 0;
+    font-size: 14px;
+    font-weight: normal;
+    text-align: center;
+}
+/*一级菜单鼠标划过状态*/
+.menu-first:hover{
+    text-decoration: none;
+    background-color: #d6d4d5;
+    border-top: 1px solid #b7b7b7;
+    border-bottom: 1px solid #acacac;
+}
+/*二级菜单*/
+.menu-second li a{
+    background-color: #F2F2F2;
+    height:31px;
+    line-height:31px;
+    border-top: 1px solid #efefef;
+    border-bottom: 1px solid #efefef;
+    font-size: 12px;
+    text-align:center;
+}
+/*二级菜单鼠标划过样式*/
+.menu-second li a:hover {
+    text-decoration: none;
+    background-color: #F5F5DC;
+    border-top: 1px solid #FCFCFC;
+    border-bottom: 1px solid #FCFCFC;
+    border-right: 3px solid #F5F5DC;
+    border-left: 3px solid #F5F5DC;
+}
+/*二级菜单选中状态*/
+.menu-second-selected {
+    background-color: #F2F2F2;
+    height:31px;
+    line-height:31px;
+    border-top: 1px solid #83ceed;
+    border-bottom: 1px solid #83ceed;
+    border-right: 3px solid #f8881c;
+    border-left: 3px solid #66c3ec;
+}
+/*覆盖bootstrap的样式*/
+.nav-list,.nav-list li a{
+    padding: 0px;
+    margin:  0px;
+}
+
+
 
 div.dataTables_length select {
     width: 75px;
@@ -97,8 +165,8 @@ table.dataTable thead .sorting_desc_disabled {
     cursor: pointer;
 }
 
-
-
+table.dataTable thead .sorting { background: url('../images/sort_both.png') no-repeat center right; }
+table.dataTable thead .sorting_asc { background: url('../images/sort_asc.png') no-repeat center right; }
 table.dataTable thead .sorting_desc { background: url('../images/sort_desc.png') no-repeat center right; }
 
 table.dataTable thead .sorting_asc_disabled { background: url('../images/sort_asc_disabled.png') no-repeat center right; }
@@ -220,7 +288,7 @@ ul.DTTT_dropdown.dropdown-menu li:hover a {
 }
 
 div.DTTT_collection_background {
-    z-index: 2002;  
+    z-index: 2002;
 }
 
 /* TableTools information display */
@@ -240,7 +308,7 @@ div.DTTT_print_info {
     background-color: white;
     border: 1px solid rgba(0, 0, 0, 0.2);
     border-radius: 6px;
-    
+
     -webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.5);
             box-shadow: 0 3px 7px rgba(0, 0, 0, 0.5);
 }
@@ -291,7 +359,7 @@ table.DTFC_Cloned tr.even {
     background-color: white;
     margin-bottom: 0;
 }
- 
+
 div.DTFC_RightHeadWrapper table ,
 div.DTFC_LeftHeadWrapper table {
     border-bottom: none !important;
@@ -300,7 +368,7 @@ div.DTFC_LeftHeadWrapper table {
     border-bottom-left-radius: 0 !important;
     border-bottom-right-radius: 0 !important;
 }
- 
+
 div.DTFC_RightHeadWrapper table thead tr:last-child th:first-child,
 div.DTFC_RightHeadWrapper table thead tr:last-child td:first-child,
 div.DTFC_LeftHeadWrapper table thead tr:last-child th:first-child,
@@ -308,20 +376,20 @@ div.DTFC_LeftHeadWrapper table thead tr:last-child td:first-child {
     border-bottom-left-radius: 0 !important;
     border-bottom-right-radius: 0 !important;
 }
- 
+
 div.DTFC_RightBodyWrapper table,
 div.DTFC_LeftBodyWrapper table {
     border-top: none;
     margin: 0 !important;
 }
- 
+
 div.DTFC_RightBodyWrapper tbody tr:first-child th,
 div.DTFC_RightBodyWrapper tbody tr:first-child td,
 div.DTFC_LeftBodyWrapper tbody tr:first-child th,
 div.DTFC_LeftBodyWrapper tbody tr:first-child td {
     border-top: none;
 }
- 
+
 div.DTFC_RightFootWrapper table,
 div.DTFC_LeftFootWrapper table {
     border-top: none;
@@ -344,16 +412,9 @@ div.FixedHeader_Cloned table {
     position: absolute;
     height: 2px;
     top:0px;
-    background: #337ab7;
+    background: #FFF0F5;
     width: 0%;
     z-index: 2000;
-}
-#alertText{
-    position: absolute;
-    line-height: 50px;
-    left: 250px;
-    color:green;
-    font-size: 20px;
 }
     </style>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -367,7 +428,7 @@ div.FixedHeader_Cloned table {
 
 <body>
     <div class="progress-reboot" id='progress-reboot'>
-    
+
     </div>
     <div id="wrapper">
 
@@ -379,10 +440,8 @@ div.FixedHeader_Cloned table {
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-              	<img src="/static/dist/img/CMDB1.png" height="50px"/> 
-            </div> 
-		<p id="alertText" class='text-success'>
-            </p>
+               <a href="https://www.creditcloud.com"><img src="/static/dist/img/CMDB1.png" height="50px" width=170px/  border="0"></a>
+            </div>
             <!-- /.navbar-header -->
 
             <ul class="nav navbar-top-links navbar-right">
@@ -393,7 +452,7 @@ div.FixedHeader_Cloned table {
                     </a>
                     <ul class="dropdown-menu dropdown-tasks">
                         <li>
-                            <a href="#">
+                            <a href="/job/">
                                 <div>
                                     <p>
                                         <strong>任务1</strong>
@@ -409,24 +468,24 @@ div.FixedHeader_Cloned table {
                         </li>
                         <li class="divider"></li>
                         <li>
-                            <a href="#">
+                            <a href="/job/">
                                 <div>
                                     <p>
                                         <strong>任务 2</strong>
-                                        <span class="pull-right text-muted">20% </span>
+                                        <span class="pull-right text-muted">50% </span>
                                     </p>
                                     <div class="progress progress-striped active">
-                                        <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
-                                            <span class="sr-only">20% Complete</span>
+                                        <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 50%">
+                                            <span class="sr-only">50% Complete</span>
                                         </div>
                                     </div>
                                 </div>
                             </a>
                         </li>
-                        
+
                         <li class="divider"></li>
                         <li>
-                            <a class="text-center" href="#">
+                            <a class="text-center" href="/job">
                                 <strong>查看全部</strong>
                                 <i class="fa fa-angle-right"></i>
                             </a>
@@ -487,47 +546,53 @@ div.FixedHeader_Cloned table {
             </ul>
             <!-- /.navbar-top-links -->
 
-            <div class="navbar-default sidebar" role="navigation">
-                <div class="sidebar-nav navbar-collapse">
-                    <ul class="nav" id="side-menu"> 
-		<li>
-                            <a href="/index"><i class="fa fa-dashboard fa-fw"></i> 控制台</a>
+
+
+
+            <div class="sidebar" role="navigation" style="width: 200px">
+                <div class="sidebar-nav avbar-collapse">
+                    <ul class="nav aa" id="side-menu">
+                        <li>
+                            <a href="/index"><i class="fa  fa-home fa-fw" text-align:"certer"></i> 控制台</a>
                         </li>
                         <li>
-                            <a href="/idc"><i class="fa fa-tasks fa-fw"></i>机房管理</a>
+                            <a href="/idc"><i class="fa fa-cloud fa-fw"></i>机房管理</a>
+                        </li>
+			<li>
+                            <a href="/mac"><i class="fa fa-laptop fa-fw"></i>主机管理</a>
+                        </li>
+			<li>
+			    <a href="/asset"><i class="fa fa-pencil-square fa-fw"></i>资产审计</a>
+			</li>
+                        <li>
+                            <a href="/asset_auto"><i class="fa fa-filter fa-fw"></i>资产采集</a>
+                        </li>
+			<li>
+                            <a href="/group"><i class="fa fa-sort-amount-asc fa-fw"></i>分组管理</a>
+                        </li>
+			<li>
+                            <a href="/file"><i class="fa fa-share-square  fa-fw"></i>文件推送</a>
+                        </li>
+			<li>
+                            <a href="/command"><i class="fa  fa-arrow-circle-o-right fa-fw"></i>单台命令</a>
                         </li>
                         <li>
-                            <a href="/mac"><i class="fa fa-tasks fa-fw"></i>主机管理</a>
+                            <a href="/command_group"><i class="fa fa-tasks fa-fw"></i>批量命令</a>
                         </li>
-                        <li>
-                            <a href="/asset"><i class="fa fa-tasks fa-fw"></i>资产审计</a>
-                        </li>
-                        <li>
-                            <a href="/asset_auto"><i class="fa fa-tasks fa-fw"></i>资产采集</a>
-                        </li>
-                        <li>
-                            <a href="/group"><i class="fa fa-support fa-fw"></i>分组管理</a>
-                        </li>
-                        <li>
-                            <a href="/file"><i class="fa fa-support fa-fw"></i>文件推送</a>
-                        </li>
-                        <li>
-                            <a href="/command"><i class="fa fa-support fa-fw"></i>单台命令</a>
-                        </li>
-                        <li>
-                            <a href="/command_group"><i class="fa fa-support fa-fw"></i>批量命令</a>
-                        </li>
-                        <li>
+			<li>
                             <a href="/job"><i class="fa fa-support fa-fw"></i>任务流程</a>
-                        </li>	
-<!--                         <li>
-                            <a href="/chart"><i class="fa fa-bar-chart-o fa-fw"></i> 图表<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a href="morris.html">Morris.js Charts</a>
-                                </li>
-                            </ul>
-                        </li> -->
+                        </li>
+
+			<li>
+                            <a href="#"><i class="fa fa-user  fa-fw"></i>用户管理</a>
+			    <ul id="userMeun" class="nav nav-list collapse menu-second">
+				<li><a href="#"><i class="icon-user"></i> 增加用户</a></li>
+        			<li><a href="#"><i class="icon-edit"></i> 修改用户</a></li>
+        			<li><a href="#"><i class="icon-trash"></i> 删除用户</a></li>
+        			<li><a href="#"><i class="icon-list"></i> 用户列表</a></li>
+			   </ul>
+                        </li>
+
 
                     </ul>
                 </div>
@@ -535,9 +600,8 @@ div.FixedHeader_Cloned table {
             </div>
             <!-- /.navbar-static-side -->
         </nav>
-
         <!-- Page Content -->
-        <div id="page-wrapper">
+        <div id="page-wrapper" style='margin-left: 200px;'>
             <div class="container-fluid">
 <form class="form-inline"  method="post">
   <div class="form-group">
@@ -550,6 +614,9 @@ div.FixedHeader_Cloned table {
   </div>
   <button type="button" class="btn btn-default" onclick="addgroup_host(this);">添加</button>
 </form>
+<div style="color:#F00" text-align:'center' id='add_ip'>
+
+</div>
 <div class="row">
                 <div class="col-lg-12">
                     <div class="panel panel-default" style='margin-top:20px;'>
@@ -563,14 +630,14 @@ div.FixedHeader_Cloned table {
                                 <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                                     <thead>
                                         <tr>
-                                	    <th>组名</th> 
+                                	    <th>组名</th>
                                             <th>主机</th>
                                             <th>操作</th>
                                         </tr>
                                     </thead>
                                     <tbody>
 
-         {%for ip in all_ip%} 
+         {%for ip in all_ip%}
 <tr>
 	<td id = "groupname">{{group_name}}</td>
 	<td id = "host">{{ip}}</td>
@@ -587,7 +654,7 @@ div.FixedHeader_Cloned table {
 </span>
 -->
 	</td>
-</tr> 
+</tr>
 	{%endfor%}
                                </tbody>
                                 </table>
@@ -654,7 +721,7 @@ div.FixedHeader_Cloned table {
         <script src="http://ironsummitmedia.github.io/startbootstrap-sb-admin-2/bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
 
     <script src='http://ironsummitmedia.github.io/startbootstrap-sb-admin-2/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js'></script>
-    <!-- Custom Theme JavaScript --> 
+    <!-- Custom Theme JavaScript -->
     <script src="/static/dist/js/sb-admin-2.js"></script>
     <script>
     $('#tipModal').on('hide.bs.modal',function(){
@@ -687,7 +754,7 @@ div.FixedHeader_Cloned table {
         "sUrl": "",
         "sZeroRecords": "没有相关记录"
     }
-    $.fn.dataTable.defaults.oLanguage=oLanguage; 
+    $.fn.dataTable.defaults.oLanguage=oLanguage;
     $('#dataTables-example').DataTable({
             responsive: true,
             // iDisplayLength:3
@@ -712,7 +779,7 @@ div.FixedHeader_Cloned table {
         var t = $('#alertText')
         var left = parseInt(t.css('left'))
         var val
-        if (is_right) {        
+        if (is_right) {
             if (left<300) {
                 val = left+1
                 t.css('left',val)
@@ -736,52 +803,56 @@ div.FixedHeader_Cloned table {
 
 <script type="text/javascript">
 
-function addgroup_host(ele){ 
-     var id=$(ele).attr("id");
-  $.ajax({  
-    url:"/addgroup_host", 
-    data:{nameInput:$('#nameInput').val(),hostInput:$('#hostInput').val()},
-    success:function(data){
-     if (data=='ok') {
-     $('#tipModal').find('.modal-body').html('添加成功').end().modal('show')
-           } 
-     else{
-	$('#tipModal').find('.modal-body').html('ip不在主机列表中').end().modal('show')
+function addgroup_host(ele){
+     if ($('#nameInput').val()&&$('#hostInput').val()){
+         var id=$(ele).attr("id");
+         $.ajax({
+             url:"/addgroup_host",
+             data:{nameInput:$('#nameInput').val(),hostInput:$('#hostInput').val()},
+             success:function(data){
+             if (data=='ok') {
+             $('#tipModal').find('.modal-body').html('添加成功').end().modal('show')
+              }
+             else{
+	         $('#tipModal').find('.modal-body').html('ip不在主机列表中').end().modal('show')
+	     }
 	}
-      }
-    
-});
-}   
+	});
+     }
+     else {
+	$('#add_ip').html('*请输入ip地址*');
+	}
+}
 </script>
 
 <script type="text/javascript">
 
-function deletegroup_host(ele){ 
+function deletegroup_host(ele){
      var id=$(ele).attr("id");
-  $.ajax({  
-    url:"/deletegroup_host", 
+  $.ajax({
+    url:"/deletegroup_host",
     data:{groupname:$('#groupname').val(),host:$('#host').val()},
     success:function(data){
      if (data=='ok') {
      $('#tipModal').find('.modal-body').html('添加成功').end().modal('show')
-           } 
+           }
       }
-    
+
 });
 }
-  
+
 function del_group_host(group_name,ip){
-    $.ajax({  
-        url:"/group_manage/group_manage_delete", 
+    $.ajax({
+        url:"/group_manage/group_manage_delete",
         data:{group_name:group_name,ip:ip},
         success:function(data){
         if (data=='ok') {
              $('#tipModal').find('.modal-body').html('删除成功').end().modal('show');
              }
         else {
-	     $('#tipModal').find('.modal-body').html('删除失败').end().modal('show');	
+	     $('#tipModal').find('.modal-body').html('删除失败').end().modal('show');
 	 }
-        } 
+        }
    });
 }
 </script>

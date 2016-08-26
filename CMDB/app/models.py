@@ -54,7 +54,7 @@ class Group(models.Model):
         verbose_name = u'主机组信息'
         verbose_name_plural = u'主机组信息管理'
 class Upload(models.Model):
-    headImg = models.FileField(upload_to = './upload/')
+    headImg = models.FileField(upload_to = './upload')
     def __unicode__(self):
         return self.headImg
     class Meta:

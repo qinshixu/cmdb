@@ -17,14 +17,13 @@ db.autocommit(True)
 c = db.cursor()
 
 def saltstack():
-    config = ConfigParser.ConfigParser()  
+    config = ConfigParser.ConfigParser()
     config.read("/web/CMDB/app/backend/config.ini")
     url = config.get("saltstack","url")
     user = config.get("saltstack","user")
     passwd = config.get("saltstack","pass")
     device = config.get("network","device")
     result_api={'url':url,'user':user,'passwd':passwd,'device':device}
-    print result_api
     return result_api
 def wirte_track_mark(num):
     f = open("/web/CMDB/app/backend/track_num.conf",'w')
@@ -44,16 +43,16 @@ def date_result(data):
     timeArray = time.strptime(data, "%Y-%m-%d %H:%M:%S")
     timeStamp = int(time.mktime(timeArray)) - 50400
     return timeStamp
- 
+
 @login_required
-def index(request): 
+def index(request):
     total_idc =Idc.objects.aggregate(Count('idc_name'))
     #for k,v in total_idc.items():
     #    print k,v
     idc_num = total_idc["idc_name__count"]
     total_host = HostList.objects.aggregate(Count('hostname'))
     host_num = total_host["hostname__count"]
-    return render_to_response("index.html",locals()) 
+    return render_to_response("index.html",locals())
 def login(request):
     return render_to_response("login.html")
 def authin(request):
@@ -79,7 +78,7 @@ def idc(request):
     return render_to_response("idc.html",locals())
 @login_required
 def addidc(request):
-    nameInput = request.GET['nameInput'] 
+    nameInput = request.GET['nameInput']
     msgInput = request.GET['msgInput']
     all_idc = Idc.objects.all()
     idc_name_list=[]
@@ -88,11 +87,11 @@ def addidc(request):
     print idc_name_list
     if nameInput in idc_name_list:
         return HttpResponse('exist')
-    else: 
+    else:
         idc_add = Idc(idc_name=nameInput,remark=msgInput)
         idc_add.save()
         return HttpResponse('ok')
-        
+
 @login_required
 def idc_delete(request,id=None):
     if request.method == 'GET':
@@ -109,8 +108,8 @@ def idc_update(request):
         a.remark=remark
         a.save()
         return HttpResponseRedirect('/idc/')
-        
-        
+
+
 @login_required
 def mac(request):
     all_host = HostList.objects.all()
@@ -120,11 +119,11 @@ def mac(request):
 def addmac(request):
     if request.method == 'GET':
         name = request.GET['name']
-        ip = request.GET['ip'] 
+        ip = request.GET['ip']
         idc_name = request.GET['idc_name']
         service = request.GET['service']
-        idc_bh = request.GET['idc_jg'] 
-        mac_add = HostList(ip=ip,hostname=name,application=service,idc_name=idc_name,bianhao=idc_bh) 
+        idc_bh = request.GET['idc_jg']
+        mac_add = HostList(ip=ip,hostname=name,application=service,idc_name=idc_name,bianhao=idc_bh)
         mac_add.save()
         return HttpResponse('ok')
 @login_required
@@ -134,7 +133,7 @@ def mac_delete(request,id=None):
         HostList.objects.filter(id=id).delete()
         return HttpResponseRedirect('/mac/')
 @login_required
-def mac_edit(request,id=None):   
+def mac_edit(request,id=None):
     if request.method == 'GET':
 	id = request.GET.get('id')
 	all_idc = Idc.objects.all()
@@ -154,8 +153,8 @@ def macresult(request):
             mac_update.save()
 	except:
 	    print "get exception"
-	finally: 
-            return HttpResponse('ok') 
+	finally:
+            return HttpResponse('ok')
 class UploadForm(forms.Form):
     headImg = forms.FileField()
 @login_required
@@ -172,7 +171,7 @@ def file(request):
     return render_to_response('file.html',locals())
 #    else:
 #        uf = UserForm()
-#        return render_to_response('file.html',{'uf':uf})  
+#        return render_to_response('file.html',{'uf':uf})
 @login_required
 def file_result(request):
     if request.method == 'GET':
@@ -180,32 +179,43 @@ def file_result(request):
 	reload(sys)
 	sys.setdefaultencoding( "utf-8" )
 	g_name = request.GET.get('g_name')
-	file = request.GET.get('file')
+	file = request.GET.get('file').split('/')[1]
 	dir = request.GET.get('dir')
-	GroupList = Group.objects.all()
-#	file_result = []
+        print g_name,file,dir
+        GroupList = Group.objects.all()
 	list_coun = []
         project_success = []
         project_fail = []
+        salt_return.objects.filter().delete()
 	for groupname in GroupList:
             if groupname.name in g_name:
                 print "slected group:",groupname.name
                 for selected_ip in HostList.objects.filter(group__name = groupname.name):
-                    host = HostList.objects.filter(ip=selected_ip.ip)
-                    for host in host:
+                    hosts = HostList.objects.filter(ip=selected_ip.ip)
+                    for host in hosts:
 			key_id = host.hostname
-			cmd = "salt %s cp.get_file salt://%s %s"%(key_id,file,dir)
-     		        os.popen(cmd).read()
-			list_coun.append(host)
+			cmd = "salt %s cp.get_file salt://%s %s"  %(key_id,file,dir)
+     		        content=os.popen(cmd).read()
+                        if dir in content:
+                            print '上传成功'
+                            b=salt_return(jid=cmd,host=key_id,success='1',result=content)
+                            b.save()
+			    list_coun.append(host)
+                        else:
+                            b=salt_return(jid=cmd,host=key_id,success='0',result=content)
+                            b.save()
+                            print '上传失败'
+			    list_coun.append(host)
                 num = len(list_coun)
+                print num
                 wirte_track_mark(str(num))
                 all_result = salt_return.objects.all()[0:num]
                 for projects in all_result:
-                    project=projects.success
-                    if project == '1':
-                        project_success.append(project)
+                    print projects.success
+                    if projects.success == '1':
+                        project_success.append(projects.success)
                     else:
-                        project_fail.append(project)
+                        project_fail.append(projects.success)
                 success_num = len(project_success)
                 fail_num = len(project_fail)
                 result = {'success':success_num,'fail':fail_num}
@@ -226,19 +236,17 @@ def command_result(request):
         ret_api = saltstack()
         ip = request.GET.get('ip')
         command = request.GET.get('command')
+        print ip,command
         host = HostList.objects.filter(ip=ip)
         for host in host:
             key_id = host.hostname
             sapi = SaltAPI(url=ret_api["url"],username=ret_api["user"],password=ret_api["passwd"])
-            ret = sapi.remote_execution(key_id,'cmd.run',command) 
-	    all_result = salt_return.objects.all().order_by("-id")[0:1]
-	    for ret in all_result:
-		key_id = ret.host
-		ret = ret.result
-		r_data = {'host':key_id,'ret':ret}
-                data = json.dumps(r_data)
-#                print data
-                return HttpResponse(data)
+            ret = sapi.remote_execution(key_id,'cmd.run',command)
+            for i in range(len(ret)):
+                ret=ret[i][key_id]
+	    r_data = {'host':key_id,'ret':ret}
+            data = json.dumps(r_data)
+            return HttpResponse(data)
 @login_required
 def command_group(request):
     if request.method == 'GET':
@@ -254,23 +262,32 @@ def command_group_result(request):
         project_success = []
 	project_fail = []
         GroupList = Group.objects.all()
+        salt_return.objects.filter().delete()
         for groupname in GroupList:
             if groupname.name in g_name:
                 print "slected group:",groupname.name
-                for selected_ip in HostList.objects.filter(group__name = groupname.name): 
-                    host = HostList.objects.filter(ip=selected_ip.ip) 		
+                for selected_ip in HostList.objects.filter(group__name = groupname.name):
+                    host = HostList.objects.filter(ip=selected_ip.ip)
                     for host in host:
-                        key_id = host.hostname 
+                        key_id = host.hostname
                         sapi = SaltAPI(url=ret_api["url"],username=ret_api["user"],password=ret_api["passwd"])
-                        ret = sapi.remote_execution(key_id,'cmd.run',command)
-		        list_coun.append(host)
-		num = len(list_coun)	
+                        try:
+                            ret = sapi.remote_execution(key_id,'cmd.run',command)
+		            list_coun.append(host)
+                            ret=ret[0][key_id]
+                            b=salt_return(jid=command,host=key_id,success='1',result=ret)
+                            b.save()
+                        except:
+                            print "Connect %s failed" % key_id
+                            b=salt_return(jid=command,host=key_id,success='0',result='failed')
+                            b.save()
+		num = len(list_coun)
 	        wirte_track_mark(str(num))
 		all_result = salt_return.objects.all()[0:num]
 		for projects in all_result:
-		    project=projects.success 
+		    project=projects.success
 		    if project == '1':
-			project_success.append(project) 
+			project_success.append(project)
 		    else:
 			project_fail.append(project)
 		success_num = len(project_success)
@@ -287,7 +304,7 @@ def job(request):
     return render_to_response("job.html")
 @login_required
 def asset(request):
-    all_asset = ServerAsset.objects.all()    
+    all_asset = ServerAsset.objects.all()
     return render_to_response("asset.html",locals())
 @login_required
 def asset_auto(request):
@@ -312,12 +329,12 @@ def asset_auto_result(request):
             result_data.hostname = result[0][8]
             result_data.ip = result[0][9][0]
             result_data.os = result[0][10]
-            result_data.save() 
+            result_data.save()
 	except:
 	    print "print check you asset"
 	    return HttpResponse('ok')
-	else:     
-            data = json.dumps(result)       	
+	else:
+            data = json.dumps(result)
             return HttpResponse(data)
 @login_required
 def asset_delete(request,id=None):
@@ -351,9 +368,9 @@ def group_delete(request,id=None):
 def group_manage(request,id=None):
     if request.method == 'GET':
 	id = request.GET.get('id')
-	group_name = Group.objects.get(id=id)	
+	group_name = Group.objects.get(id=id)
  	all_ip = group_name.hostlist_set.all()
-	all_host = HostList.objects.all()	
+	all_host = HostList.objects.all()
         return render_to_response("group_manage.html",locals())
 @login_required
 def group_manage_delete(request,group_name=None,ip=None):
@@ -366,7 +383,7 @@ def group_manage_delete(request,group_name=None,ip=None):
 	    all_group = Group.objects.filter(name=group_name)
 	    all_host = HostList.objects.filter(ip=ip)
 	    for group in all_group:
-	        group_id= group.id 
+	        group_id= group.id
 	    for host in all_host:
 	        host_id= host.id
             h = HostList.objects.get(id=host_id)
@@ -393,76 +410,3 @@ def addgroup_host(request):
 	    return HttpResponse('ok')
         except:
             return HttpResponse('false')
-def monitor(request):
-    data = []
-    host = []
-    c = db.cursor()
-    c.execute("SELECT `name` from `key_name`")
-    one = c.fetchall()
-    d = db.cursor()
-    d.execute("SELECT `hostname` from `statusinfo`")
-    hostname = d.fetchall()
-    for i in one:
-        data.append(i[0])
-    for x in hostname:
-	host.append(x[0])
-    host = list(set(host))
-    print host
-    return render_to_response("monitor.html",locals())
-def getdata(request):
-    if request.method == 'GET':
-	data_list = []
-	item = str(request.GET.get('item'))
-	start =str(request.GET.get('from'))
-	stop  = str(request.GET.get('to'))
-	host = str(request.GET.get('host'))
-	if item != 'None':
-	    data_list = [item,start,stop,host]
-	    print data_list
-	    f = open("/web/CMDB/app/backend/monitor_data.txt",'w')
-            try:
-	        for i in data_list:
-                    f.write(i)
-		    f.write("\n")
-            finally:
-                f.close()
-	if item == 'None':
-	    pass 
-	return HttpResponse('ok')
-def monitor_result(request):
-    return render_to_response('monitor_result.html')
-def monitor_data(request):
-    data = []
-    f = open("/web/CMDB/app/backend/monitor_data.txt")
-    try:
-        lines = f.readlines()
-    finally:
-        f.close()
-    for line in lines:
-        data.append(line.strip())
-    item = data[0]
-    start = data[1]
-    stop = data[2]
-    host = data[3]
-    if start == '' and stop == '':
-	starttime = int(time.time())
-	c.execute("SELECT `time`,`%s` FROM `statusinfo` where `hostname` = '%s' and `time` < %d" %(item,host,starttime))
-	ones = [[i[0]*1000 + 28800000, i[1]] for i in c.fetchall()]
-	return HttpResponse(json.dumps(ones))	
-    if start == '' and stop != '':
-	stop = stop.strip()
-    	timeStamp = date_result(stop)
-	c.execute("SELECT `time`,`%s` FROM `statusinfo` where `hostname` = '%s' and `time` < %d" %(item,host,timeStamp))
-        ones = [[i[0]*1000 + 28800000, i[1]] for i in c.fetchall()]
-	return HttpResponse(json.dumps(ones))
-    if start != '' and stop == '':
-	timeStamp=date_result(data)
-	c.execute("SELECT `time`,`%s` FROM `statusinfo` where `hostname` = '%s' and `time` > %d" %(item,host,timeStamp))
-	ones = [[i[0]*1000 + 28800000, i[1]] for i in c.fetchall()]
-        return HttpResponse(json.dumps(ones))
-    if start != '' and stop != '': 
-        start_timeStamp = date_result(start) 
-        stop_timeStamp = date_result(stop)
-        c.execute("SELECT `time`,`%s` FROM `statusinfo` where `hostname` = '%s' and `time` > %d and `time` < %d" %(item,host,start_timeStamp,stop_timeStamp))	
-	ones = [[i[0]*1000 + 28800000, i[1]] for i in c.fetchall()]
-        return HttpResponse(json.dumps(ones))

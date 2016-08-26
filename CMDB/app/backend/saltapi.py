@@ -14,7 +14,7 @@ class SaltAPI(object):
         self.__url = url.rstrip('/')
         self.__user = username
         self.__password = password
-        print self.__url,self.__user,self.__password
+#        print self.__url,self.__user,self.__password
 
     def token_id(self):
         ''' user login and get token id '''
