@@ -1,0 +1,139 @@
+{% include 'base.html' %}
+        <div id="page-wrapper" class="gray-bg">
+            <div class="row border-bottom">
+              <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+                  <div class="navbar-header">
+                      <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
+                      <form role="search" class="navbar-form-custom" method="get" action="">
+                      </form>
+                  </div>
+                  {% include 'base1.html' %}
+              </nav>
+            </div>
+
+
+
+<div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-default" style='margin-top:20px;'>
+<!--                         <div class="panel-heading">
+                           idc信息
+                            <button class='btn btn-default' id='addIdc'>添加idc</button>
+                        </div> -->
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+
+
+<div style="width:30%">
+<form class="form-horizontal"  method="post" action="/download_result/">
+  <div class="form-group">
+    <label for="inputPassword3" class="col-sm-2 control-label">主机</label>
+    <div class="col-sm-10">
+        <select class="form-control" name="hostname">
+      {%for host in all_host %}
+      <option>{{host.hostname}}</option>
+      {%endfor%}
+     </select>
+    </div>
+  </div>
+<div class="form-group">
+    <label for="inputPassword3" class="col-sm-2 control-label">路径</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" name="dir" placeholder="写文件全路径，如：/tmp/1.txt">
+    </div>
+
+<br></br>
+  <div style="color:#F00" text-align:'center' id='error'>
+    {{ ret }}
+  </div>
+  </div>
+  <!--
+  <div class="form-group">
+    <label for="inputPassword3" class="col-sm-2 control-label">推送目录</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id='dir' placeholder="写全目录和文件名如：/tmp/1.txt">
+    </div>
+  </div>-->
+    <!--
+      <div class="modal-footer" style="width:50%">
+        <button type="button" class="btn btn-primary"  onclick="command_result(this);" >确认</button>
+   </div>
+    -->
+      <div style="width:150%">
+  <button type="submit" class="btn btn-primary">下载</button>
+
+ <!--button type="button" class="btn btn-primary"  onclick="download(this);" >下载</button-->
+<!--span class="btn btn-primary" ><a href="/command_group/check_result/" style="color:white"  role="button">查看结果</a></span-->
+
+
+</br></br>
+
+</form>
+<!--
+<textarea class="form-control" id="result" style="margin: 0px 7.140625px 0px 0px; width: 545px; height: 125px;"></textarea>
+-->
+   <!--
+                            <!-- /.table-responsive -->
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                    <!-- /.panel -->
+                </div>
+</div>
+
+            </div>
+            <!-- /.container-fluid -->
+        </div>
+
+{% include 'base2.html' %}
+    </div>
+</div>
+
+<div class="modal fade" id='tipModal'>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Modal title</h4>
+      </div>
+      <div class="modal-body">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">确认</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+    <script>
+    $('#tipModal').on('hide.bs.modal',function(){
+        location.reload()
+    })
+    </script>
+
+<script type="text/javascript">
+function download(ele){
+   if($('#host_ip').val()&&$('#dir').val()){
+  $.ajax(
+    {
+    url:"/download_result",
+    data:{host_ip:$('#host_ip').val(),dir:$('#dir').val()},
+    success:function(data){
+
+      }
+
+});
+}
+    else {
+        $('#error').html('*请输入文件路径*')
+
+    }
+}
+</script>
+
+
+
+
+</body>
+
+</html>

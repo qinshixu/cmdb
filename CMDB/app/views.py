@@ -1,6 +1,6 @@
 #encoding=utf-8
 # Create your views here.
-from django.http import HttpResponse,HttpResponseRedirect
+from django.http import HttpResponse,HttpResponseRedirect,StreamingHttpResponse
 from django.shortcuts import render_to_response,render
 from django.template import Template,loader,RequestContext
 from django.contrib.auth.decorators import login_required
@@ -12,6 +12,7 @@ from app.backend.saltapi  import SaltAPI
 from app.backend.asset_info import get_server_asset_info
 import MySQLdb as mysql
 import  ConfigParser,sys,json,os,time,pickle
+
 db = mysql.connect(user="root", passwd="123456", db="monitor", charset="utf8")
 db.autocommit(True)
 c = db.cursor()
@@ -155,8 +156,44 @@ def macresult(request):
 	    print "get exception"
 	finally:
             return HttpResponse('ok')
+
+
+
+@login_required
+def download(request):
+    if request.method == 'GET':
+	all_host = HostList.objects.all()
+    return render_to_response('download.html',locals())
+
+@login_required
+def download_result(request):
+    if request.method =='POST':
+        hostname = request.POST.get('hostname')
+        filepath = request.POST.get('dir')
+        print hostname,filepath
+        cmd='salt %s cp.push %s' %(hostname,filepath)
+        print cmd
+        ret=os.popen(cmd).readlines()
+        print type(ret),ret[-1]
+        if 'True' in ret[-1]:
+            salt_minior_dir='/var/cache/salt/master/minions/u1/files'
+            fullpath=salt_minior_dir+filepath
+            f=open(fullpath)
+            data=f.read()
+            filename = fullpath.split('/')[-1]
+            response = HttpResponse(data,mimetype='application/octet-stream')
+            response['Content-Disposition'] = 'attachment; filename=%s' %filename
+            return response
+        else:
+            all_host = HostList.objects.all()
+            ret={}
+            ret='File not exist or host connect failed'
+            print type(ret)
+            return render_to_response('download.html',locals())
+
 class UploadForm(forms.Form):
     headImg = forms.FileField()
+
 @login_required
 def file(request):
 #    if request.method == 'POST':
