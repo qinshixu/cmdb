@@ -18,7 +18,7 @@
     <label for="exampleInputName2">组名</label>
     <input type="text" class="form-control" id="g_name">
   </div>
-  <button type="button" class="btn btn-default" onclick="grouprun(this);">添加</button>
+  <button type="button" class="btn btn-primary" onclick="grouprun(this);">添加</button>
   <div style="color:#F00" text-align:'center' id='errorMsg'>
   </div>
 </form>
@@ -45,7 +45,7 @@
 <tr>
 	<td>{{all_group.name}}</td>
 	<td>
-<span class="label label-primary hover" data-id='6'>
+<span class="btn btn-xs btn-danger" data-id='6'>
 <a style='color:white'  onClick="del_group('{{ all_group.id }}');">删除</a>
 <!--
 <a href="/group/group_delete/?id={{ all_group.id }}" style="color:white"  role="button">删除</a>
@@ -107,7 +107,7 @@
       <div class="modal-body">
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">确认</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">确认</button>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->

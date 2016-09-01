@@ -39,19 +39,10 @@
 </div>
 
       <div style="width:150%">
- <button type="button" class="btn btn-primary"  onclick="command_result(this);" >确认</button></br></br>
+ <button type="button" class="btn btn-primary "  onclick="command_result(this);" >确认</button></br></br>
  </form>
-	  <!--
-          <textarea class="form-control" id="result" style="margin: 0px -54.5px 0px 0px; height: 450px; width: 600px;"></textarea>
-       -->
-
 <div  id="result"></div>
-
-
 </div>
-
-
-
 
 	<div>
   </div>
@@ -76,6 +67,9 @@ function command_result(ele){
     url:"/command_result",
     data:{ip:$('#ip').val(),command:$('#Command').val()},
     success:function(data){
+        if (data=='ok'){
+          $('#error').html('*主机连接失败*');
+        }
         if (data) {
        var obj = JSON.parse(data);
        var  com_result = obj.ret.replace(/\\n/g,'<br/>');

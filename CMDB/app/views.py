@@ -1,6 +1,6 @@
 #encoding=utf-8
 # Create your views here.
-from django.http import HttpResponse,HttpResponseRedirect,StreamingHttpResponse
+from django.http import HttpResponse,HttpResponseRedirect
 from django.shortcuts import render_to_response,render
 from django.template import Template,loader,RequestContext
 from django.contrib.auth.decorators import login_required
@@ -12,6 +12,7 @@ from app.backend.saltapi  import SaltAPI
 from app.backend.asset_info import get_server_asset_info
 import MySQLdb as mysql
 import  ConfigParser,sys,json,os,time,pickle
+from  connect import SshTty
 
 db = mysql.connect(user="root", passwd="123456", db="monitor", charset="utf8")
 db.autocommit(True)
@@ -191,6 +192,7 @@ def download_result(request):
             print type(ret)
             return render_to_response('download.html',locals())
 
+
 class UploadForm(forms.Form):
     headImg = forms.FileField()
 
@@ -278,12 +280,17 @@ def command_result(request):
         for host in host:
             key_id = host.hostname
             sapi = SaltAPI(url=ret_api["url"],username=ret_api["user"],password=ret_api["passwd"])
-            ret = sapi.remote_execution(key_id,'cmd.run',command)
-            for i in range(len(ret)):
-                ret=ret[i][key_id]
-	    r_data = {'host':key_id,'ret':ret}
-            data = json.dumps(r_data)
-            return HttpResponse(data)
+            try:
+                ret = sapi.remote_execution(key_id,'cmd.run',command)
+                for i in range(len(ret)):
+                    ret=ret[i][key_id]
+	            r_data = {'host':key_id,'ret':ret}
+                data = json.dumps(r_data)
+                return HttpResponse(data)
+            except:
+                print '123'
+                return HttpResponse('ok')
+
 @login_required
 def command_group(request):
     if request.method == 'GET':
@@ -408,7 +415,7 @@ def group_manage(request,id=None):
 	group_name = Group.objects.get(id=id)
  	all_ip = group_name.hostlist_set.all()
 	all_host = HostList.objects.all()
-        return render_to_response("group_manage.html",locals())
+    return render_to_response("group_manage.html",locals())
 @login_required
 def group_manage_delete(request,group_name=None,ip=None):
 #    if request.method == 'GET':
@@ -447,3 +454,8 @@ def addgroup_host(request):
 	    return HttpResponse('ok')
         except:
             return HttpResponse('false')
+@login_required
+def connect(request):
+#    P=SshTty()
+#    aa=P.connect()
+    return render_to_response("terminal.html",locals())

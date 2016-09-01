@@ -12,7 +12,7 @@
               </nav>
             </div>
             <div class="row" style='margin-top:20px'>
-            	<button class="btn btn-default" id='addmacBtn' style='margin-left:20px'>添加机器</button>
+            	<button class="btn btn-primary" id='addmacBtn' style='margin-left:20px'>添加机器</button>
             </div>
 
             <div class="row">
@@ -50,7 +50,7 @@
             	<td id="server">{{all_host.application}}</td>
             	<td>
             <span class="label label-primary hover deletemac"><a href="/mac/mac_edit/?id={{ all_host.id }}" style="color:white"  role="button">编辑</a></span>
-            <span class="label label-primary hover deletemac"><a href="/mac/mac_delete/?id={{ all_host.id }}" style="color:white"  role="button">删除</a></span>
+            <span class=" btn btn-xs btn-danger"><a href="/mac/mac_delete/?id={{ all_host.id }}" style="color:white"  role="button">删除</a></span>
             	</td>
             </tr>
                  {%endfor%}

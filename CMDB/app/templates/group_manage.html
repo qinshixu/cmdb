@@ -18,9 +18,14 @@
   </div>
   <div class="form-group">
     <label for="exampleInputEmail2">IP</label>
-    <input type="text" class="form-control"  id="hostInput">
+    <select class="form-control" id="hostInput">
+      {% for host in all_host %}
+      <option>{{ host.ip }}</options>
+        {% endfor %}
+    </select>
+    <!--input type="text" class="form-control"  id="hostInput"-->
   </div>
-  <button type="button" class="btn btn-default" onclick="addgroup_host(this);">添加</button>
+  <button type="button" class="btn btn-primary" onclick="addgroup_host(this);">添加</button>
 </form>
 <div style="color:#F00" text-align:'center' id='add_ip'>
 
@@ -50,7 +55,7 @@
 	<td id = "groupname">{{group_name}}</td>
 	<td id = "host">{{ip}}</td>
 	<td>
-<span class="label label-primary hover" data-id='6'>
+<span class="btn btn-xs btn-danger" data-id='6'>
 <a style='color:white'  onClick="del_group_host('{{group_name}}','{{ ip }}');">删除</a>
 </span>
 <!--
@@ -89,7 +94,7 @@
         <p>One fine body&hellip;</p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary">Save changes</button>
       </div>
     </div><!-- /.modal-content -->
@@ -106,12 +111,12 @@
       <div class="modal-body">
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">确认</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">确认</button>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
-  
+
     <script>
     $('#tipModal').on('hide.bs.modal',function(){
         location.reload()
