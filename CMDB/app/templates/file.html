@@ -41,7 +41,7 @@
 <div class="form-group">
     <label for="inputPassword3" class="col-sm-2 control-label">选择文件</label>
     <div class="col-sm-10">
-        <select class="form-control" id='file'>
+        <select class="form-control" id='filename'>
       {%for all_file in all_file %}
       <option>{{all_file.headImg}}</option>
       {%endfor%}
@@ -51,7 +51,7 @@
   <div class="form-group">
     <label for="inputPassword3" class="col-sm-2 control-label">推送目录</label>
     <div class="col-sm-10">
-      <input type="text" class="form-control" id='dir' placeholder="写全目录和文件名如：/tmp/1.txt">
+      <input type="text" class="form-control" id='dirname' placeholder="写全目录和文件名如：/tmp/1.txt">
     </div>
   </div>
     <!--
@@ -132,119 +132,12 @@
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
-    <script>
-    $('#tipModal').on('hide.bs.modal',function(){
-        location.reload()
-    })
-    $(function(){
-           var oLanguage={
-        "oAria": {
-            "sSortAscending": ": 升序排列",
-            "sSortDescending": ": 降序排列"
-        },
-        "oPaginate": {
-            "sFirst": "首页",
-            "sLast": "末页",
-            "sNext": "下页",
-            "sPrevious": "上页"
-        },
-        "sEmptyTable": "没有相关记录",
-        "sInfo": "第 _START_ 到 _END_ 条记录，共 _TOTAL_ 条",
-        "sInfoEmpty": "第 0 到 0 条记录，共 0 条",
-        "sInfoFiltered": "(从 _MAX_ 条记录中检索)",
-        "sInfoPostFix": "",
-        "sDecimal": "",
-        "sThousands": ",",
-        "sLengthMenu": "推送的历史记录: _MENU_",
-        "sLoadingRecords": "正在载入...",
-        "sProcessing": "正在载入...",
-        "sSearch": "搜索:",
-        "sSearchPlaceholder": "",
-        "sUrl": "",
-        "sZeroRecords": "没有相关记录"
-    }
-    $.fn.dataTable.defaults.oLanguage=oLanguage;
-    $('#dataTables-example').DataTable({
-            responsive: true,
-            // iDisplayLength:3
-    });
-    });
-    var pro = 10
-    var timer = null
-    timer = setInterval(function(){
-        if (pro<100) {
-        pro = pro*1.5
-        $('#progress-reboot').css('width',pro+'%')
-        }else{
-            clearInterval(timer)
-            $('#progress-reboot').addClass('hide')
-        }
-    },100)
-    var is_right = true
-    setInterval(function(){
-        var t = $('#alertText')
-        var left = parseInt(t.css('left'))
-        var val
-        if (is_right) {
-            if (left<300) {
-                val = left+1
-                t.css('left',val)
-            }else{
-                is_right = false
-            }
-        }else{
-            if (left>250) {
-                val = left-1
-                t.css('left',val)
-            }else{
-                is_right = true
-            }
-        }
-        // if (left<300&&left>250) {
-        //     t.css('left',left+1)
-        // };
-    },50)
-    </script>
-
-
-<script>
-	$('#addmacBtn').click(function(){
-		$('#addmacModal').modal('show')
-	})
-	    	$(document).on('click','.deletemac',function(){
-	    		var id = $(this).data('id')
-	    		$.get('/deletemac?id='+id,function(res){
-	    			if (res == 'ok') {
-	    				location.reload()
-	    			};
-	    		})
-	    	})
-	$('#confirmAddmacBtn').click(function(){
-		var is_val = true
-		$('#addmacForm').find('input').each(function(i,v){
-			if (!$(v).val()) {
-				$(v).after('<span class="text-danger">必填字段</span>')
-				is_val = false
-			}else{
-				$(v).next().remove()
-			}
-		})
-		if (is_val) {
-		$.get('/addmac',$('#addmacForm').serialize(),function(data){
-			if (data=='ok') {
-				$('#tipModal').find('.modal-body').html('添加成功').end().modal('show')
-			};
-		})
-		};
-	})
-</script>
 <script type="text/javascript">
 function file_result(ele){
-   if($('#g_name').val()&&$('#file').val()&&$('#dir').val()){
-  var id=$(ele).attr("id");
+   if($('#g_name').val()&&$('#filename').val()&&$('#dirname').val()){
   $.ajax({
     url:"/file_result",
-    data:{g_name:$('#g_name').val(),file:$('#file').val(),dir:$('#dir').val()},
+    data:{g_name:$('#g_name').val(),file:$('#filename').val(),dir:$('#dirname').val()},
     success:function(data){
        if (data) {
           var obj = JSON.parse(data);
@@ -255,12 +148,9 @@ function file_result(ele){
         }
 
 });
-}}
+}
+else {
+  $('#tipModal').find('.modal-body').html($('#dirname').val()).end().modal('show')
+}
+}
 </script>
-</script>
-
-
-
-</body>
-
-</html>

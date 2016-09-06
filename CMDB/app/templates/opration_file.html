@@ -50,12 +50,12 @@
   <td id="filetime"> {{v}} </td>
   <td>
   <span class="btn btn-xs btn-primary" data-id='6'>
-    <button type="button"  class="btn btn-xs btn-primary" onclick="check_file(this);">
-        <input type="hidden" value={{k}} class='filename'>查看</button>
-</span>
-<span class="btn btn-xs btn-primary" data-id='6'>
- <button type="button" class="btn btn-xs btn-primary" onclick="update_file(this);" >
-     <input type="hidden" value={{k}} class='filename'>编辑</button>
+    <a style='color:white' onclick="check_file(this);">
+        <input type="hidden" value={{k}} class='filename'>查看</a>
+</span>&nbsp;
+<span class="btn btn-xs btn-warning" data-id='6'>
+ <a style='color:white' onclick="update_file(this);" >
+     <input type="hidden" value={{k}} class='filename'>编辑</a>
 </span>
 	</td>
 </tr>
@@ -101,17 +101,20 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-      </div>
+
       <form class="m-t" role="form" method="post" action="/oprationfile_update/">
           <div class="form-group">
-              <input type="text" name="hostname" class="hostname" placeholder="hostname">
+              主机:<input type="text" name="hostname" class="hostname" placeholder="hostname" readonly>
           </div>
           <div class="form-group">
-              <input type="text" name="filepath" class= "filepath" placeholder="filepath">
+            路径:<input type="text" name="filepath" class= "filepath" placeholder="filepath" readonly>
+          </div>
           </div>
           <textarea name="content" cols="80%" rows="30%" class="content"></textarea>
-          <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+      <div class="modal-footer">
+          &nbsp;&nbsp;<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>&nbsp;&nbsp;
           <button type="submit" class="btn btn-primary">保存</button>
+      </div>
       </form>
   </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->

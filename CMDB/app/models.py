@@ -13,14 +13,14 @@ class Idc(models.Model):
 	return self.idc_name
     class Meta:
 	verbose_name = u'机房列表'
-        verbose_name_plural = u'机房列表'	
+        verbose_name_plural = u'机房列表'
 class HostList(models.Model):
     ip = models.IPAddressField(unique=True, verbose_name=u'IP地址')
     hostname = models.CharField(max_length=30, verbose_name=u'主机名')
-    group = models.ManyToManyField('Group', null=True, blank=True ,verbose_name=u'组名') 
+    group = models.ManyToManyField('Group', null=True, blank=True ,verbose_name=u'组名')
     application = models.CharField(max_length=20, verbose_name=u'应用')
-    bianhao = models.CharField(max_length=30, verbose_name=u'编号') 
-    idc_name = models.CharField(max_length=40,null=True,blank=True, verbose_name=u'所属机房') 
+    bianhao = models.CharField(max_length=30, verbose_name=u'编号')
+    idc_name = models.CharField(max_length=40,null=True,blank=True, verbose_name=u'所属机房')
     def __unicode__(self):
         return self.ip
     class Meta:
@@ -54,7 +54,7 @@ class Group(models.Model):
         verbose_name = u'主机组信息'
         verbose_name_plural = u'主机组信息管理'
 class Upload(models.Model):
-    headImg = models.FileField(upload_to = './upload')
+    headImg = models.FileField(upload_to = '/web/CMDB/upload')
     def __unicode__(self):
         return self.headImg
     class Meta:
@@ -63,7 +63,7 @@ class Upload(models.Model):
 class cmd_run(models.Model):
     ip = models.IPAddressField(verbose_name=u'IP地址')
     command = models.CharField(max_length=30, verbose_name=u'命令')
-    track_mark = models.IntegerField() 
+    track_mark = models.IntegerField()
     def __unicode__(self):
 	return self.ip
     class Meta:

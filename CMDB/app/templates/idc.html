@@ -52,16 +52,15 @@
 	<td>{{all_idc.idc_name}}</td>
 	<td>{{all_idc.remark}}</td>
 	<td>
-		<span class="btn btn-xs btn-danger" data-id='6'>
-		<a style='color:white'  onClick="del_idc('/idc/idc_delete/?id={{ all_idc.id }}');">删除</a>
-                </span>&nbsp;&nbsp;
-
-		<span class="btn btn-xs btn-warning" data-id='6'>
+		<span class="btn btn-xs btn-primary" data-id='6'>
 			<a href="/mac/check_host/?idc_name={{all_idc.idc_name}}" style='color:white'>查看</a>
 		</span>&nbsp;&nbsp;
-		<span class="label label-primary hover" data-id='6'>
-		<a style='color:white'  onClick="update_idc('{{ all_idc.idc_name }}')";">编辑</a>
+		<span class=" btn btn-xs btn-warning" data-id='6'>
+		<a style='color:white'  onClick="update_idc('{{ all_idc.idc_name }}')";>编辑</a>
                 </span>&nbsp;&nbsp;
+                <span class="btn btn-xs btn-danger" data-id='6'>
+            		<a style='color:white'  onClick="del_idc('/idc/idc_delete/?id={{ all_idc.id }}');">删除</a>
+                            </span>&nbsp;&nbsp;
 	</td>
 </tr>
           {%endfor%}

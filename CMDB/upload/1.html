@@ -1,0 +1,26 @@
+<script>
+function dclick() {
+form1.text.value = "您双击了页面！";
+}
+
+function Click() {
+form1.text.value += "您单击了页面";
+}
+
+function down() {
+form1.text.value = "您按下了鼠标";
+}
+
+function up() {
+form1.text.value = "您释放了鼠标"
+}
+</script>
+</head>
+
+<body ondblclick="dclick()" onmousedown="down()" onmouseup="up()" onclick="click()">
+<form action="" id="form1" name="form1" method="post">
+<label>
+<textarea name="text" cols="50" rows="2"></textarea>
+</label>
+</form>
+</body>

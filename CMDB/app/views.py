@@ -218,7 +218,7 @@ def file_result(request):
 	reload(sys)
 	sys.setdefaultencoding( "utf-8" )
 	g_name = request.GET.get('g_name')
-	file = request.GET.get('file').split('/')[1]
+	file = request.GET.get('file')
 	dir = request.GET.get('dir')
         print g_name,file,dir
         GroupList = Group.objects.all()
@@ -233,7 +233,7 @@ def file_result(request):
                     hosts = HostList.objects.filter(ip=selected_ip.ip)
                     for host in hosts:
 			key_id = host.hostname
-			cmd = "salt %s cp.get_file salt://%s %s"  %(key_id,file,dir)
+			cmd = "salt %s cp.get_file salt:/%s %s"  %(key_id,file,dir)
      		        content=os.popen(cmd).read()
                         if dir in content:
                             print '上传成功'
@@ -259,11 +259,7 @@ def file_result(request):
                 fail_num = len(project_fail)
                 result = {'success':success_num,'fail':fail_num}
                 return HttpResponse(json.dumps(result))
-#			key_id = {'host':key_id,'ret':result}
-#			file_result.append(key_id)
-#		data = json.dumps(file_result)
-#		print data
-#		return HttpResponse(data)
+
 @login_required
 def command(request):
     if request.method == 'GET':
@@ -463,6 +459,11 @@ def oprationfile_result(request):
     all_host = HostList.objects.all()
     hostname = request.POST.get('hostInput')
     path = request.POST.get('filepath')
+    salt_minior_dir='/var/cache/salt/master/minions/u1/files'
+    salt_path=salt_minior_dir+path
+    print path,hostname
+    cmd='salt %s cp.push_dir %s' %(hostname,path)
+    ret=os.popen(cmd).readlines()
     if path and '/' in path[-1]:
         files={}
         dirs=os.listdir(path)
@@ -484,9 +485,11 @@ def oprationfile_check(request):
     path=request.GET.get('path')
     filename=request.GET.get('filename')
     print hostname,path,filename
+    salt_minior_dir='/var/cache/salt/master/minions/u1/files'
     filepath=path+filename
+    salt_filepath=salt_minior_dir+path+filename
     print filepath
-    f=open(filepath)
+    f=open(salt_filepath)
     content=f.read()
     f.close()
     print content
@@ -498,9 +501,13 @@ def oprationfile_update(request):
     hostname=request.POST.get('hostname')
     filepath=request.POST.get('filepath')
     content=request.POST.get('content')
+    salt_minior_dir='/var/cache/salt/master/minions/u1/files'
+    salt_filepath=salt_minior_dir+filepath
     path=os.path.dirname(filepath)+'/'
-    print hostname,filepath,content
-    f=open(filepath,'w')
+    print hostname,salt_filepath,content
+    f=open(salt_filepath,'w')
     f.write(content)
     f.close()
+    cmd='salt %s cp.get_file  salt:/%s %s' % (hostname,salt_filepath,filepath)
+    ret=os.popen(cmd).readlines()
     return render_to_response('opration_update.html',locals())
