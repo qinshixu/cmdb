@@ -424,16 +424,16 @@ def group_manage_delete(request,group_name=None,ip=None):
         group_name = request.GET['group_name']
         ip = request.GET['ip']
         try:
-	    all_group = Group.objects.filter(name=group_name)
-	    all_host = HostList.objects.filter(ip=ip)
-	    for group in all_group:
-	        group_id= group.id
-	    for host in all_host:
-	        host_id= host.id
-            h = HostList.objects.get(id=host_id)
-            g = Group.objects.get(id=group_id)
-	    h.group.remove(g)
-	    return HttpResponse('ok')
+	        all_group = Group.objects.filter(name=group_name)
+	        all_host = HostList.objects.filter(ip=ip)
+	        for group in all_group:
+	            group_id= group.id
+	        for host in all_host:
+	            host_id= host.id
+                h = HostList.objects.get(id=host_id)
+                g = Group.objects.get(id=group_id)
+	        h.group.remove(g)
+	        return HttpResponse('ok')
         except:
             return HttpResponse('false')
 @login_required
@@ -455,7 +455,39 @@ def addgroup_host(request):
         except:
             return HttpResponse('false')
 @login_required
-def connect(request):
-#    P=SshTty()
-#    aa=P.connect()
-    return render_to_response("terminal.html",locals())
+def oprationfile(request):
+    if request.method == 'GET':
+        all_host = HostList.objects.all()
+        return render_to_response('opration_file.html',locals())
+def oprationfile_result(request):
+    all_host = HostList.objects.all()
+    hostname = request.POST.get('hostInput')
+    path = request.POST.get('filepath')
+    if path and '/' in path[-1]:
+        files={}
+        dirs=os.listdir(path)
+        for f in dirs:
+            fileList=[]
+            filePath=path+f
+            if os.path.isfile(filePath):
+                FileUpdateTime=time.ctime(os.path.getmtime(filePath))
+                files[f]=FileUpdateTime
+        print files
+        return render_to_response('opration_file.html',locals())
+    else:
+        mes='*请填写正确的文件路径*'
+        return render_to_response('opration_file.html',locals())
+@login_required
+def oprationfile_check(request):
+    hostname=request.GET.get('hostname')
+    path=request.GET.get('path')
+    filename=request.GET.get('filename')
+    print hostname,path,filename
+    filepath=path+filename
+    print filepath
+    f=open(filepath)
+    content=f.read()
+    print content
+    r_data={'hostname':hostname,'filepath':filepath,'content':content}
+    data=json.dumps(r_data)
+    return HttpResponse(data)
