@@ -10,7 +10,7 @@ from django import  forms
 from app.models import *
 from app.backend.saltapi  import SaltAPI
 from app.backend.asset_info import get_server_asset_info
-import MySQLdb as mysql
+import MySQLdb as mysql,datetime
 import  ConfigParser,sys,json,os,time,pickle
 from  connect import SshTty
 
@@ -470,7 +470,8 @@ def oprationfile_result(request):
             fileList=[]
             filePath=path+f
             if os.path.isfile(filePath):
-                FileUpdateTime=time.ctime(os.path.getmtime(filePath))
+                Str_UpdateTime=datetime.datetime.fromtimestamp(os.path.getmtime(filePath))
+                FileUpdateTime=Str_UpdateTime.strftime('%Y-%m-%d %H:%M:%S')
                 files[f]=FileUpdateTime
         print files
         return render_to_response('opration_file.html',locals())
@@ -487,7 +488,19 @@ def oprationfile_check(request):
     print filepath
     f=open(filepath)
     content=f.read()
+    f.close()
     print content
     r_data={'hostname':hostname,'filepath':filepath,'content':content}
     data=json.dumps(r_data)
     return HttpResponse(data)
+@login_required
+def oprationfile_update(request):
+    hostname=request.POST.get('hostname')
+    filepath=request.POST.get('filepath')
+    content=request.POST.get('content')
+    path=os.path.dirname(filepath)+'/'
+    print hostname,filepath,content
+    f=open(filepath,'w')
+    f.write(content)
+    f.close()
+    return render_to_response('opration_update.html',locals())
