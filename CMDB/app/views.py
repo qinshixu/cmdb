@@ -12,11 +12,13 @@ from app.backend.saltapi  import SaltAPI
 from app.backend.asset_info import get_server_asset_info
 import MySQLdb as mysql,datetime
 import  ConfigParser,sys,json,os,time,pickle
-from  connect import SshTty
+import salt.client
 
 db = mysql.connect(user="root", passwd="123456", db="monitor", charset="utf8")
 db.autocommit(True)
 c = db.cursor()
+
+client=salt.client.LocalClient()
 
 def saltstack():
     config = ConfigParser.ConfigParser()
@@ -172,11 +174,11 @@ def download_result(request):
         hostname = request.POST.get('hostname')
         filepath = request.POST.get('dir')
         print hostname,filepath
-        cmd='salt %s cp.push %s' %(hostname,filepath)
-        print cmd
-        ret=os.popen(cmd).readlines()
-        print type(ret),ret[-1]
-        if 'True' in ret[-1]:
+#        cmd='salt %s cp.push %s' %(hostname,filepath)
+        ret=client.cmd(hostname,'cp.push',[filepath])
+        print ret
+#        ret=os.popen(cmd).readlines()
+        if ret[hostname]:
             salt_minior_dir='/var/cache/salt/master/minions/u1/files'
             fullpath=salt_minior_dir+filepath
             f=open(fullpath)
@@ -187,9 +189,7 @@ def download_result(request):
             return response
         else:
             all_host = HostList.objects.all()
-            ret={}
             ret='File not exist or host connect failed'
-            print type(ret)
             return render_to_response('download.html',locals())
 
 
@@ -232,19 +232,20 @@ def file_result(request):
                 for selected_ip in HostList.objects.filter(group__name = groupname.name):
                     hosts = HostList.objects.filter(ip=selected_ip.ip)
                     for host in hosts:
-			key_id = host.hostname
-			cmd = "salt %s cp.get_file salt:/%s %s"  %(key_id,file,dir)
-     		        content=os.popen(cmd).read()
-                        if dir in content:
+                        key_id = host.hostname
+                        cmd = "salt %s cp.get_file salt:/%s %s"  %(key_id,file,dir)
+                        ret=client.cmd(key_id,'cp.get_file',['salt:/'+file,dir])
+                        print ret
+                        if dir in ret[key_id]:
                             print '上传成功'
-                            b=salt_return(jid=cmd,host=key_id,success='1',result=content)
+                            b=salt_return(jid=cmd,host=key_id,success='1',result=ret)
                             b.save()
-			    list_coun.append(host)
+                            list_coun.append(host)
                         else:
-                            b=salt_return(jid=cmd,host=key_id,success='0',result=content)
+                            b=salt_return(jid=cmd,host=key_id,success='0',result=ret)
                             b.save()
                             print '上传失败'
-			    list_coun.append(host)
+                            list_coun.append(host)
                 num = len(list_coun)
                 print num
                 wirte_track_mark(str(num))
@@ -462,14 +463,15 @@ def oprationfile_result(request):
     salt_minior_dir='/var/cache/salt/master/minions/u1/files'
     salt_path=salt_minior_dir+path
     print path,hostname
-    cmd='salt %s cp.push_dir %s' %(hostname,path)
-    ret=os.popen(cmd).readlines()
+    client.cmd(hostname,'cp.push_dir',[path])
+#    cmd='salt %s cp.push_dir %s' %(hostname,path)
+#    ret=os.popen(cmd).readlines()
     if path and '/' in path[-1]:
         files={}
-        dirs=os.listdir(path)
+        dirs=os.listdir(salt_path)
         for f in dirs:
             fileList=[]
-            filePath=path+f
+            filePath=salt_path+f
             if os.path.isfile(filePath):
                 Str_UpdateTime=datetime.datetime.fromtimestamp(os.path.getmtime(filePath))
                 FileUpdateTime=Str_UpdateTime.strftime('%Y-%m-%d %H:%M:%S')
@@ -508,6 +510,7 @@ def oprationfile_update(request):
     f=open(salt_filepath,'w')
     f.write(content)
     f.close()
-    cmd='salt %s cp.get_file  salt:/%s %s' % (hostname,salt_filepath,filepath)
-    ret=os.popen(cmd).readlines()
+    client.cmd(hostname,'cp.get_file',['salt:/'+salt_filepath,filepath])
+#    cmd='salt %s cp.get_file  salt:/%s %s' % (hostname,salt_filepath,filepath)
+#    ret=os.popen(cmd).readlines()
     return render_to_response('opration_update.html',locals())

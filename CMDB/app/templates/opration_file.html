@@ -86,7 +86,8 @@
       <span class="filepath">
       </span>
       </div>
-      <div class="content">
+      <div>
+        <textarea name="content" cols="80%" rows="30%" class="content"></textarea>
       </div>
 
       <div class="modal-footer">
@@ -131,7 +132,7 @@ function check_file(ele){
                content=obj.content.replace(/\n/g,'</br>');
                $('#checkfile').find('.hostname').html("主机:" + obj.hostname);
                $('#checkfile').find('.filepath').html("路径:" + obj.filepath);
-               $('#checkfile').find('.content').html(content);
+               $('#checkfile').find('.content').html(obj.content);
                $('#checkfile').modal('show');
               }
 	     }
