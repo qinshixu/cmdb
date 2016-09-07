@@ -29,11 +29,11 @@
 <div style="width:30%">
 <form class="form-horizontal"  method="post" action="/command_group_result/">
   <div class="form-group">
-    <label for="inputPassword3" class="col-sm-2 control-label">主机</label>
+    <label for="inputPassword3" class="col-sm-2 control-label">批量主机</label>
     <div class="col-sm-10">
-        <select class="form-control" id='hostname'>
-      {%for host in all_host %}
-      <option>{{host.hostname}}</option>
+        <select class="form-control" id='g_name'>
+      {%for all_group in all_group %}
+      <option>{{all_group.name}}</option>
       {%endfor%}
      </select>
     </div>
@@ -61,12 +61,16 @@
     -->
       <div style="width:150%">
  <button type="button" class="btn btn-primary"  onclick="file_result(this);" >推送</button>
+<span class="btn btn-primary" ><a href="/command_group/check_result/" style="color:white"  role="button">查看结果</a></span>
+
 
 </br></br>
 
   </form>
 
-<!--textarea class="form-control" id="result" style="margin: 0px 7.140625px 0px 0px; width: 200px; height: 50px;"></textarea-->
+<textarea class="form-control" id="result" style="margin: 0px 7.140625px 0px 0px; width: 545px; height: 125px;"></textarea>
+   <!--
+                            <!-- /.table-responsive -->
                         </div>
                         <!-- /.panel-body -->
                     </div>
@@ -115,17 +119,93 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">message</h4>
+        <h4 class="modal-title">Modal title</h4>
       </div>
       <div class="modal-body">
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal">确认</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">确认</button>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+<script>
+$('#tipModal').on('hide.bs.modal',function(){
+    location.reload()
+})
+$(function(){
+       var oLanguage={
+    "oAria": {
+        "sSortAscending": ": 升序排列",
+        "sSortDescending": ": 降序排列"
+    },
+    "oPaginate": {
+        "sFirst": "首页",
+        "sLast": "末页",
+        "sNext": "下页",
+        "sPrevious": "上页"
+    },
+    "sEmptyTable": "没有相关记录",
+    "sInfo": "第 _START_ 到 _END_ 条记录，共 _TOTAL_ 条",
+    "sInfoEmpty": "第 0 到 0 条记录，共 0 条",
+    "sInfoFiltered": "(从 _MAX_ 条记录中检索)",
+    "sInfoPostFix": "",
+    "sDecimal": "",
+    "sThousands": ",",
+    "sLengthMenu": "每页显示条数: _MENU_",
+    "sLoadingRecords": "正在载入...",
+    "sProcessing": "正在载入...",
+    "sSearch": "搜索:",
+    "sSearchPlaceholder": "",
+    "sUrl": "",
+    "sZeroRecords": "没有相关记录"
+}
+$.fn.dataTable.defaults.oLanguage=oLanguage;
+$('#dataTables-example').DataTable({
+        responsive: true,
+        // iDisplayLength:3
+});
+});
+var pro = 10
+var timer = null
+timer = setInterval(function(){
+    if (pro<100) {
 
+    pro = pro*1.5
+
+    $('#progress-reboot').css('width',pro+'%')
+    }else{
+        clearInterval(timer)
+        $('#progress-reboot').addClass('hide')
+    }
+
+},100)
+var is_right = true
+setInterval(function(){
+    var t = $('#alertText')
+    var left = parseInt(t.css('left'))
+    var val
+    if (is_right) {
+        if (left<300) {
+            val = left+1
+            t.css('left',val)
+        }else{
+            is_right = false
+        }
+    }else{
+        if (left>250) {
+            val = left-1
+            t.css('left',val)
+        }else{
+            is_right = true
+        }
+
+    }
+    // if (left<300&&left>250) {
+    //     t.css('left',left+1)
+    // };
+},50)
+</script>
 
 
 <script>
@@ -165,15 +245,15 @@ $.get('/addmac',$('#addmacForm').serialize(),function(data){
 
 <script type="text/javascript">
 function file_result(ele){
-   if($('#hostname').val()&&$('#filename').val()&&$('#dirname').val()){
+   if($('#g_name').val()&&$('#filename').val()&&$('#dirname').val()){
   $.ajax({
-    url:"/file_result",
-    data:{hostname:$('#hostname').val(),file:$('#filename').val(),dir:$('#dirname').val()},
+    url:"/groupfile_result",
+    data:{g_name:$('#g_name').val(),file:$('#filename').val(),dir:$('#dirname').val()},
     success:function(data){
        if (data) {
           var obj = JSON.parse(data);
            {
-          $('#tipModal').find('.modal-body').html(obj.mes).end().modal('show');
+          $('#result').html("\n" + "推送成功主机:" + obj.success + "\n\r" + "推送失败主机:" + obj.fail);
          };
       }
         }
@@ -181,7 +261,7 @@ function file_result(ele){
 });
 }
 else {
-  $('#tipModal').find('.modal-body').html('请输入完整信息').end().modal('show')
+  $('#tipModal').find('.modal-body').html($('#dirname').val()).end().modal('show')
 }
 }
 </script>

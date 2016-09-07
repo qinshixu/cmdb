@@ -1,0 +1,103 @@
+#!/usr/bin/env python
+#coding:utf-8
+
+import paramiko
+import platform
+import sys,os
+import threading
+import time
+
+def color_print(msg, color='red', exits=False):
+    color_msg = {'blue': '\033[1;36m%s\033[0m',
+                 'green': '\033[1;32m%s\033[0m',
+                 'yellow': '\033[1;33m%s\033[0m',
+                 'red': '\033[1;31m%s\033[0m',
+                 'title': '\033[30;42m%s\033[0m',
+                 'info': '\033[32m%s\033[0m'
+		}
+    msg = color_msg.get(color, 'red') % msg
+    print msg
+    if exits:
+        time.sleep(2)
+        sys.exit()
+    return msg
+
+def ssh(hostname,cmd):
+    port=22
+    username='root'
+    pkey_file='/root/.ssh/id_rsa'
+    key = paramiko.RSAKey.from_private_key_file(pkey_file)
+    s = paramiko.SSHClient()
+    s.load_system_host_keys()
+    s.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    try:
+        s.connect(hostname,port,username,pkey=key)
+        stdin,stdout,stderr = s.exec_command(cmd)
+    	result=stdout.read()
+        color_print('Connect %s Successful' % hostname,'info')
+	return result.strip('\n')
+    except:
+        color_print('Connect %s failed' % hostname,'red',True)
+def MkPasswd():
+    from random import choice
+    import string
+    SpecialChar='&!@#$%^*-_='
+    length=16
+    chars=string.letters+string.digits+SpecialChar
+    passwd=''.join([choice(chars) for i in range(length)])
+    return passwd
+
+def PwdFile(hostname,passwd):
+    istimeformat='%Y-%m-%d'
+    Date=time.strftime(istimeformat,time.localtime())
+    FileName='UpdatePwd_%s.txt' % Date
+    print FileName
+    f=open(FileName,'a')
+    f.write(hostname+':\t'+passwd+'\n')
+    f.close()
+
+def UpdatePwd(Linux_Dist,passwd,hostname):
+    cmd1="echo ubuntu:'%s' | chpasswd"  % passwd
+    cmd2="echo root:'%s' | chpasswd"  % passwd
+    List=['CentOS','Redhat']
+    if Linux_Dist=='Ubuntu':
+        try:
+            ssh(hostname,cmd1)
+            color_print('%s User Ubuntu  Passwd Update Successful!' % hostname,'yellow')
+            PwdFile(hostname,passwd)
+        except:
+            color_print('%s User Ubuntu  Passwd Update Faied!!!' % hostname,'red')
+    elif Linux_Dist in List:
+        try:
+            ssh(hostname,cmd2)
+            color_print('%s User Root Passwd Update Successful!' % hostname,'yellow')
+            PwdFile(hostname,passwd)
+        except:
+             color_print('%s User Root Passwd Update Faied!!!' % hostname,'red')
+    else:
+        color_print('Unsupported operating system','red')
+
+def main(hostname):
+    sys_cmd="cat /etc/issue | head -n 1 |awk '{print $1}'"
+    passwd=MkPasswd()
+    color_print('Random Passwd: %s' % passwd,'info')
+    Linux_Dist=ssh(hostname,sys_cmd)
+    color_print('%s linux distribution is: %s' % (hostname,Linux_Dist),'info')
+    UpdatePwd(Linux_Dist,passwd,hostname)
+class MyThread(threading.Thread):
+    def __init__(self,hostname):
+        self.hostname=hostname
+        threading.Thread.__init__(self)
+    def run(self):
+        main(self.hostname)
+
+
+if  __name__=='__main__':
+    try:
+        with open('host.bak') as f:
+            for i in f:
+                hostname=i.strip('\n')
+                t=MyThread(hostname)
+                t.start()
+    except Exception,e:
+        color_print(e,'red')

@@ -195,9 +195,39 @@ def download_result(request):
 
 class UploadForm(forms.Form):
     headImg = forms.FileField()
-
 @login_required
 def file(request):
+#    if request.method == 'POST':
+    all_host = HostList.objects.all()
+    all_file = Upload.objects.all()
+    uf = UploadForm(request.POST,request.FILES)
+    if uf.is_valid():
+        headImg = uf.cleaned_data['headImg']
+        user = Upload()
+        user.headImg = headImg
+        user.save()
+    return render_to_response('file.html',locals())
+@login_required
+def file_result(request):
+    hostname = request.GET.get('hostname')
+    salt_file = request.GET.get('file')
+    mini_dest = request.GET.get('dir')
+    ret=client.cmd(hostname,'cp.get_file',['salt:/'+salt_file,mini_dest])
+    if ret:
+        if 'exception' in ret[hostname]:
+            result = {'mes':'推送目录填写错误'}
+            return HttpResponse(json.dumps(result))
+        if  mini_dest in ret[hostname]:
+            print '上传成功'
+            result = {'mes':"推送成功"}
+            return HttpResponse(json.dumps(result))
+    else:
+        print '上传失败'
+        mes='连接主机%s失败' % str(hostname)
+        result = {'mes':mes}
+        return HttpResponse(json.dumps(result))
+@login_required
+def groupfile(request):
 #    if request.method == 'POST':
     all_group = Group.objects.all()
     all_file = Upload.objects.all()
@@ -207,12 +237,12 @@ def file(request):
         user = Upload()
         user.headImg = headImg
         user.save()
-    return render_to_response('file.html',locals())
+    return render_to_response('groupfile.html',locals())
 #    else:
 #        uf = UserForm()
 #        return render_to_response('file.html',{'uf':uf})
 @login_required
-def file_result(request):
+def groupfile_result(request):
     if request.method == 'GET':
 	import sys
 	reload(sys)
@@ -220,13 +250,13 @@ def file_result(request):
 	g_name = request.GET.get('g_name')
 	file = request.GET.get('file')
 	dir = request.GET.get('dir')
-        print g_name,file,dir
-        GroupList = Group.objects.all()
-	list_coun = []
-        project_success = []
-        project_fail = []
-        salt_return.objects.filter().delete()
-	for groupname in GroupList:
+    print g_name,file,dir
+    GroupList = Group.objects.all()
+    list_coun = []
+    project_success = []
+    project_fail = []
+    salt_return.objects.filter().delete()
+    for groupname in GroupList:
             if groupname.name in g_name:
                 print "slected group:",groupname.name
                 for selected_ip in HostList.objects.filter(group__name = groupname.name):
@@ -473,9 +503,14 @@ def oprationfile_result(request):
             fileList=[]
             filePath=salt_path+f
             if os.path.isfile(filePath):
+                '''
                 Str_UpdateTime=datetime.datetime.fromtimestamp(os.path.getmtime(filePath))
                 FileUpdateTime=Str_UpdateTime.strftime('%Y-%m-%d %H:%M:%S')
                 files[f]=FileUpdateTime
+                '''
+                FileSize=round(os.path.getsize(filePath)/1000.0,1)
+                files[f]=FileSize
+
         print files
         return render_to_response('opration_file.html',locals())
     else:
