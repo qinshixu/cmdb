@@ -11,7 +11,7 @@
               </nav>
             </div>
 
-<form class="form-inline"  method="post" action="/oprationfile_result">
+<form class="form-inline"  method="post" action="/oprationfile_result" id="A">
   <div class="form-group">
     <label for="exampleInputName2">主机名</label>
     <select class="form-control" name="hostInput" id="hostname">
@@ -115,6 +115,27 @@
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
+<div class="modal fade" id='updatefile_result'>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h3 class="modal-title"  style="color:#00A600" >修改成功</h3>
+      </div>
+      <div class="modal-body" style="color:#ff7575" >
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">否</button>
+        <button type="button" class="btn btn-primary" id="reboot" ><a href="/service/?h={{ hostname }}&cmd=1">是</a></button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<body onload="result()">
+
 <script type="text/javascript">
 function check_file(ele){
          $.ajax({
@@ -148,7 +169,15 @@ function update_file(ele){
 }
 });
 }
-function sub() {
-  $('#blbl').submit()
+function result(){
+  $('#updatefile_result').find('.modal-body').html("是否重启后台应用?").end().modal('show');
 }
+$(function(){
+    $("#reboot").click(function(){
+       alert('重启需要等待一段时间，请不要点击其他页面!');
+     }
+   )
+ });
+
+
 </script>

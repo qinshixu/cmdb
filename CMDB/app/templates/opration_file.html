@@ -105,13 +105,13 @@
 
       <form class="m-t" role="form" method="post" action="/oprationfile_update/">
           <div class="form-group">
-              主机:<input type="text" name="hostname" class="hostname" placeholder="hostname" readonly>
+              主机:<input type="text" name="hostname" class="hostname"  placeholder="hostname" readonly>
           </div>
           <div class="form-group">
-            路径:<input type="text" name="filepath" class= "filepath" placeholder="filepath" readonly>
+            路径:<input type="text" name="filepath" class="filepath"  placeholder="filepath" readonly>
           </div>
           </div>
-          <textarea name="content" cols="80%" rows="30%" class="content"></textarea>
+          <textarea name="content" cols="80%" rows="30%" class="content" ></textarea>
       <div class="modal-footer">
           &nbsp;&nbsp;<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>&nbsp;&nbsp;
           <button type="submit" class="btn btn-primary">保存</button>
@@ -120,7 +120,6 @@
   </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
-
 <script type="text/javascript">
 function check_file(ele){
          $.ajax({

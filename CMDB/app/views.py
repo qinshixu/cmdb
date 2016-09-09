@@ -213,6 +213,7 @@ def file_result(request):
     salt_file = request.GET.get('file')
     mini_dest = request.GET.get('dir')
     ret=client.cmd(hostname,'cp.get_file',['salt:/'+salt_file,mini_dest])
+    print ret
     if ret:
         if 'exception' in ret[hostname]:
             result = {'mes':'推送目录填写错误'}
@@ -300,23 +301,21 @@ def command(request):
 def command_result(request):
     if request.method == 'GET':
         ret_api = saltstack()
-        ip = request.GET.get('ip')
+        key_id = request.GET.get('hostname')
         command = request.GET.get('command')
-        print ip,command
-        host = HostList.objects.filter(ip=ip)
-        for host in host:
-            key_id = host.hostname
-            sapi = SaltAPI(url=ret_api["url"],username=ret_api["user"],password=ret_api["passwd"])
-            try:
-                ret = sapi.remote_execution(key_id,'cmd.run',command)
-                for i in range(len(ret)):
-                    ret=ret[i][key_id]
-	            r_data = {'host':key_id,'ret':ret}
-                data = json.dumps(r_data)
-                return HttpResponse(data)
-            except:
-                print '123'
-                return HttpResponse('ok')
+        print key_id,command
+#        host = HostList.objects.filter(ip=ip)
+        sapi = SaltAPI(url=ret_api["url"],username=ret_api["user"],password=ret_api["passwd"])
+        try:
+            ret = sapi.remote_execution(key_id,'cmd.run',command)
+            for i in range(len(ret)):
+                ret=ret[i][key_id]
+	        r_data = {'host':key_id,'ret':ret}
+            data = json.dumps(r_data)
+            return HttpResponse(data)
+        except:
+            print '123'
+            return HttpResponse('ok')
 
 @login_required
 def command_group(request):
@@ -487,12 +486,15 @@ def oprationfile(request):
         all_host = HostList.objects.all()
         return render_to_response('opration_file.html',locals())
 def oprationfile_result(request):
+    import shutil
     all_host = HostList.objects.all()
     hostname = request.POST.get('hostInput')
     path = request.POST.get('filepath')
     salt_minior_dir='/var/cache/salt/master/minions/u1/files'
     salt_path=salt_minior_dir+path
     print path,hostname
+    if os.path.exists(salt_path):
+        shutil.rmtree(salt_path)
     client.cmd(hostname,'cp.push_dir',[path])
 #    cmd='salt %s cp.push_dir %s' %(hostname,path)
 #    ret=os.popen(cmd).readlines()
@@ -538,10 +540,10 @@ def oprationfile_update(request):
     hostname=request.POST.get('hostname')
     filepath=request.POST.get('filepath')
     content=request.POST.get('content')
+    content=content.encode("utf-8")
     salt_minior_dir='/var/cache/salt/master/minions/u1/files'
     salt_filepath=salt_minior_dir+filepath
     path=os.path.dirname(filepath)+'/'
-    print hostname,salt_filepath,content
     f=open(salt_filepath,'w')
     f.write(content)
     f.close()
@@ -549,3 +551,24 @@ def oprationfile_update(request):
 #    cmd='salt %s cp.get_file  salt:/%s %s' % (hostname,salt_filepath,filepath)
 #    ret=os.popen(cmd).readlines()
     return render_to_response('opration_update.html',locals())
+@login_required
+def service_result(request):
+    hostname=str(request.GET.get('h'))
+    cmd_flag=request.GET.get('cmd')
+    all_host = HostList.objects.all()
+    print hostname,cmd_flag
+    if hostname and cmd_flag:
+        if str(cmd_flag)=='1':
+            cmd="/root/deploy/deploy.sh -r"
+        elif str(cmd_flag)=='2':
+            cmd="/root/deploy/deploy.sh -u"
+        ret=client.cmd(hostname,'cmd.run',[cmd])
+        if ret:
+            ret=ret[hostname]
+            print ret
+            return render_to_response('service_result.html',locals())
+        else:
+            ret='Connect host  Failed!'
+            return render_to_response('service_result.html',locals())
+    else:
+        return render_to_response('service.html',locals())

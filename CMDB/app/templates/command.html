@@ -21,9 +21,9 @@
   <div class="form-group">
     <label for="inputPassword3" class="col-sm-2 control-label">主机</label>
     <div class="col-sm-10">
-   	<select class="form-control" id='ip'>
+   	<select class="form-control" id='hostname'>
       {%for host in all_host %}
-      <option>{{host.ip}}</option>
+      <option>{{host.hostname}}</option>
       {%endfor%}
      </select>
     </div>
@@ -61,11 +61,11 @@
 
 <script type="text/javascript">
 function command_result(ele){
-   if($('#ip').val()&&$('#Command').val()){
+   if($('#hostname').val()&&$('#Command').val()){
      var id=$(ele).attr("id");
   $.ajax({
     url:"/command_result",
-    data:{ip:$('#ip').val(),command:$('#Command').val()},
+    data:{hostname:$('#hostname').val(),command:$('#Command').val()},
     success:function(data){
         if (data=='ok'){
           $('#error').html('*主机连接失败*');

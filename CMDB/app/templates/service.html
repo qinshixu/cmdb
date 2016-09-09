@@ -1,0 +1,110 @@
+
+{% include 'base.html' %}
+        <div id="page-wrapper" class="gray-bg">
+            <div class="row border-bottom">
+              <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+                  <div class="navbar-header">
+                      <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
+                      <form role="search" class="navbar-form-custom" method="get" action="">
+                      </form>
+                  </div>
+                  {% include 'base1.html' %}
+              </nav>
+            </div>
+
+            <div class="row">
+                            <div class="col-lg-12">
+                                <div class="panel panel-default" style='margin-top:20px;'>
+                                    <div class="panel-body">
+                                        <div class="dataTable_wrapper">
+                                            <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                                                <thead>
+                                                    <tr>
+                                                        <th>机器名</th>
+                                                        <th>ip</th>
+                                                        <th>后端操作</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                 {%for all_host in all_host %}
+            <tr>
+            	<td id="host">{{all_host.hostname}}</td>
+            	<td id="host_ip">{{all_host.ip}}</td>
+            	<td>
+            <span class="label label-primary hover"><a href="/service/?h={{ all_host.hostname }}&cmd=1" style="color:white"  role="button" id="reboot" >重启</a></span>
+            <span id="update" class="label label-primary hover"><a href="/service/?h={{ all_host.hostname }}&cmd=2" style="color:white"  role="button">更新</a></span>
+            	</td>
+            </tr>
+                 {%endfor%}
+                                            </tbody>
+                                            </table>
+
+                                        </div>
+                                        <!-- /.table-responsive -->
+                                    </div>
+                                    <!-- /.panel-body -->
+                                </div>
+                                <!-- /.panel -->
+                            </div>
+            </div>
+
+
+
+
+  {% include 'base2.html' %}
+          </div>
+</div>
+
+<div class="modal fade" id='checkfile'>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="hostname">
+        </h4>
+      <span class="filepath">
+      </span>
+      </div>
+      <div>
+        <textarea name="content" cols="80%" rows="30%" class="content"></textarea>
+      </div>
+
+
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-primary"  onclick="macadd(this);" >确认</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div>
+<div class="modal fade" id='tipModal'>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Modal title</h4>
+      </div>
+      <div class="modal-body">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">确认</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div>
+
+<script type="text/javascript">
+$(function(){
+    $("#reboot").click(function(){
+       alert('重启需要等待一段时间，请不要点击其他页面！');
+     }
+   )
+ });
+ $(function(){
+     $("#update").click(function(){
+        alert('更新需要等待一段时间，请不要点击其他页面！');
+      }
+    )
+  });
+</script>
