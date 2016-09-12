@@ -31,8 +31,8 @@
             	<td id="host">{{all_host.hostname}}</td>
             	<td id="host_ip">{{all_host.ip}}</td>
             	<td>
-                <span class="label label-primary hover"><a href="/service/?h={{ all_host.hostname }}&cmd=1" style="color:white"  role="button" id="reboot" >重启</a></span>
-                <span id="update" class="label label-primary hover"><a href="/service/?h={{ all_host.hostname }}&cmd=2" style="color:white"  role="button">更新</a></span>
+                <span class="label label-primary hover"><a href="/service/?h={{ all_host.hostname }}&cmd=1" style="color:white"  role="button" class="reboot" >重启</a></span>
+                <span class="label label-primary hover"><a href="/service/?h={{ all_host.hostname }}&cmd=2" style="color:white"  role="button" class="update" >更新</a></span>
             	</td>
             </tr>
                  {%endfor%}
@@ -48,7 +48,7 @@
                             </div>
 <div  id="result" style="color:#3CB371">
 <p style="color:#3CB371" >执行结果:</p>
-<textarea style="background-color:transparent; BORDER-BOTTOM: 0px solid; BORDER-LEFT: 0px solid; BORDER-RIGHT: 0px solid; BORDER-TOP: 0px solid " cols="100%" rows="20%" class="opration_result" readonly="readonly">
+<textarea style="background-color:transparent; BORDER-BOTTOM: 0px solid; BORDER-LEFT: 0px solid; BORDER-RIGHT: 0px solid; BORDER-TOP: 0px solid  " cols="100%" rows="20%" class="opration_result" readonly="readonly">
 {{ ret }}
 </textarea>
 </div>
@@ -102,13 +102,13 @@
 
 <script type="text/javascript">
 $(function(){
-    $("#reboot").click(function(){
+    $(".reboot").click(function(){
        alert('重启需要等待一段时间，请不要点击其他页面！');
      }
    )
  });
  $(function(){
-     $("#update").click(function(){
+     $(".update").click(function(){
         alert('更新需要等待一段时间，请不要点击其他页面！');
       }
     )
