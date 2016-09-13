@@ -214,7 +214,7 @@ def file_result(request):
     mini_dest = request.GET.get('dir')
     ret=client.cmd(hostname,'cp.get_file',['salt:/'+salt_file,mini_dest])
     print ret
-    if ret:
+    if ret[hostname]:
         if 'exception' in ret[hostname]:
             result = {'mes':'推送目录填写错误'}
             return HttpResponse(json.dumps(result))
@@ -224,9 +224,18 @@ def file_result(request):
             return HttpResponse(json.dumps(result))
     else:
         print '上传失败'
-        mes='连接主机%s失败' % str(hostname)
+        mes='上传至主机%s失败' % str(hostname)
         result = {'mes':mes}
         return HttpResponse(json.dumps(result))
+@login_required
+def del_upload_file(request):
+    Upload.objects.all().delete()
+    Path='/web/CMDB/upload/'
+    if os.path.exists(Path):
+        files=os.listdir(Path)
+        for i in files:
+            os.remove(Path+i)
+    return HttpResponse('ok')
 @login_required
 def groupfile(request):
 #    if request.method == 'POST':
@@ -363,7 +372,7 @@ def command_group_result(request):
 		success_num = len(project_success)
 		fail_num = len(project_fail)
 		result = {'success':success_num,'fail':fail_num}
-                return HttpResponse(json.dumps(result))
+        return HttpResponse(json.dumps(result))
 @login_required
 def check_result(request):
     num = int(read_track_mark())
