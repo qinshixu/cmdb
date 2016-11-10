@@ -14,6 +14,18 @@ class Idc(models.Model):
     class Meta:
 	verbose_name = u'机房列表'
         verbose_name_plural = u'机房列表'
+
+class Login_Record(models.Model):
+    name = models.CharField(max_length=40, verbose_name=u'登录用户')
+    loginTime = models.DateTimeField(auto_now=True, verbose_name=u'登录时间')
+    ip = models.IPAddressField(unique=False,verbose_name=u'登录IP地址')
+    status = models.IntegerField(default=0,verbose_name=u'是否成功')
+    def __unicode__(self):
+        return self.name
+    class Meta:
+        verbose_name=u'登录用户'
+        verbose_name_plural=u'登录用户'
+
 class HostList(models.Model):
     ip = models.IPAddressField(unique=True, verbose_name=u'IP地址')
     hostname = models.CharField(max_length=30, verbose_name=u'主机名')

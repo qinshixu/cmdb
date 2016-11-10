@@ -57,11 +57,19 @@ def index(request):
     total_host = HostList.objects.aggregate(Count('hostname'))
     host_num = total_host["hostname__count"]
     return render_to_response("index.html",locals())
+def get_clinet_ip(request):
+    try:
+        real_ip = request.MEAT['HTTP_X_FORWARDED_FOR']
+        regip = real_ip.split(",")[0]
+    except:
+        regip = request.META['REMOTE_ADDR']
+    return regip
 def login(request):
     return render_to_response("login.html")
 def authin(request):
     username = request.POST.get('username','')
     password = request.POST.get('password','')
+    real_ip = get_clinet_ip(request)
     if username and password is not  None:
         total_idc =Idc.objects.aggregate(Count('idc_name'))
         idc_num = total_idc["idc_name__count"]
@@ -71,10 +79,16 @@ def authin(request):
         print request.user,user,total_idc,idc_num,host_num
         if user is not None:
             auth.login(request,user)
+            P = Login_Record(name=username,ip=real_ip,status=1)
+            P.save()
             return  render_to_response('index.html',{'login_user':request.user,'idc_num':idc_num,'host_num':host_num})
         else:
+            P = Login_Record(name=username,ip=real_ip)
+            P.save()
             return render_to_response('login.html',{'login_err':'Wrong username or password!'})
     else:
+        P = Login_Record(name=username,ip=real_ip)
+        P.save()
         return render_to_response('login.html',{'login_err':'Please input username or password!'})
 @login_required
 def idc(request):
