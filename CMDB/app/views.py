@@ -144,7 +144,7 @@ def idc_delete(request,id=None):
         id = request.GET.get('id')
         idc =Idc.objects.get(id=id)
         Idc.objects.filter(id=id).delete()
-        logger.info(str(request.user)+ ' - '+'delete idc name '+str(idc.idc_name))
+        logger.error(str(request.user)+ ' - '+'delete idc name '+str(idc.idc_name))
         return HttpResponseRedirect('/idc/')
 @login_required
 def idc_update(request):
@@ -173,36 +173,38 @@ def addmac(request):
         idc_bh = request.GET['idc_jg']
         mac_add = HostList(ip=ip,hostname=name,application=service,idc_name=idc_name,bianhao=idc_bh)
         mac_add.save()
+        logger.info(str(request.user)+' - '+'addmac'+ ' - '+str(name)+'-'+str(ip)+'-'+str(idc_name)+'-'+str(service)+'-'+str(idc_bh))
         return HttpResponse('ok')
 @login_required
 def mac_delete(request,id=None):
     if request.method == 'GET':
         id = request.GET.get('id')
+        HostInfo = HostList.objects.get(id=id)
         HostList.objects.filter(id=id).delete()
+        logger.error(str(request.user)+' - '+'delmac'+ ' - hostname:'+str(HostInfo.hostname)+'- host_ip:'+str(HostInfo.ip)+'- idc_name:'+str(HostInfo.idc_name)+'- host_application:'+str(HostInfo.application)+'- host_bianhao:'+str(HostInfo.bianhao))
         return HttpResponseRedirect('/mac/')
 @login_required
 def mac_edit(request,id=None):
     if request.method == 'GET':
-	id = request.GET.get('id')
-	all_idc = Idc.objects.all()
-        all_host=HostList.objects.filter(id=id)
-	return render_to_response("mac_edit.html",locals())
+        id = request.GET.get('id')
+        all_idc = Idc.objects.all()
+        all_host = HostList.objects.filter(id=id)
+        return render_to_response("mac_edit.html",locals())
 @login_required
 def macresult(request):
     if request.method =='GET':
-        id = request.GET['id']
-        ip = request.GET['ip']
+        id = int(request.GET['id'])
+        ip = str(request.GET['ip'])
         name = request.GET['name']
         idc_name = request.GET['idc_name']
         service = request.GET['service']
         idc_bh = request.GET['idc_jg']
-        try:
-            mac_update = HostList.objects.filter(id=id).update(ip=ip,hostname=name,application=service,idc_name=idc_name,bianhao=idc_bh)
-            mac_update.save()
-	except:
-	    print "get exception"
-	finally:
-            return HttpResponse('ok')
+    try:
+        mac_update = HostList.objects.filter(id=id).update(ip=ip,hostname=name,application=service,idc_name=idc_name,bianhao=idc_bh)
+        logger.info(str(request.user) + ' - '+'editmac'+ ' - hostname:' +  str(name)+'- host_ip:' +  str(ip)+'- idc_name:' + str(idc_name)+'- application:' + str(service)+'- bianhao:' + str(idc_bh))
+        return HttpResponse('ok')
+    finally:
+        return HttpResponse('ok')
 
 
 
