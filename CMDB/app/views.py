@@ -13,12 +13,34 @@ from app.backend.asset_info import get_server_asset_info
 import MySQLdb as mysql,datetime
 import  ConfigParser,sys,json,os,time,pickle
 import salt.client
+import logging
+
+
 
 db = mysql.connect(user="root", passwd="123456", db="monitor", charset="utf8")
 db.autocommit(True)
 c = db.cursor()
 
 client=salt.client.LocalClient()
+
+timeformat1 = '%Y-%m-%d %H:%M:%S'
+logPath = '/var/log/app/'
+if not os.path.exists(logPath):
+    os.makedirs(logPath)
+if not(logPath[-1] == '/'): logPath = logPath + '/'
+loggingFile = logPath + 'AppServer' + time.strftime('%Y-%m-%d', time.localtime()) + '.log'
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
+formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+shdlr = logging.StreamHandler()
+shdlr.setLevel(logging.WARNING)
+shdlr.setFormatter(formatter)
+fhdlr = logging.FileHandler( loggingFile )
+fhdlr.setLevel(logging.INFO)
+fhdlr.setFormatter(formatter)
+logger.addHandler(shdlr)
+logger.addHandler(fhdlr)
+print time.asctime() + ' - INFO: AppServer started'
 
 def saltstack():
     config = ConfigParser.ConfigParser()
@@ -70,25 +92,29 @@ def authin(request):
     username = request.POST.get('username','')
     password = request.POST.get('password','')
     real_ip = get_clinet_ip(request)
+    logger.info(username +' - '+ real_ip + ' - connect server' )
     if username and password is not  None:
         total_idc =Idc.objects.aggregate(Count('idc_name'))
         idc_num = total_idc["idc_name__count"]
         user = auth.authenticate(username=username,password=password)
         total_host = HostList.objects.aggregate(Count('hostname'))
         host_num = total_host["hostname__count"]
-        print request.user,user,total_idc,idc_num,host_num
+        #print request.user,user,total_idc,idc_num,host_num
         if user is not None:
             auth.login(request,user)
             P = Login_Record(name=username,ip=real_ip,status=1)
             P.save()
+            logger.info(username +' - '+ real_ip + ' - login server' )
             return  render_to_response('index.html',{'login_user':request.user,'idc_num':idc_num,'host_num':host_num})
         else:
             P = Login_Record(name=username,ip=real_ip)
             P.save()
+            logger.error(username +' - '+ real_ip + ' - login failed' )
             return render_to_response('login.html',{'login_err':'Wrong username or password!'})
     else:
         P = Login_Record(name=username,ip=real_ip)
         P.save()
+        logger.error(username +' - '+ real_ip + ' - login failed' )
         return render_to_response('login.html',{'login_err':'Please input username or password!'})
 @login_required
 def idc(request):
@@ -102,29 +128,33 @@ def addidc(request):
     idc_name_list=[]
     for i in all_idc:
         idc_name_list.append(i.idc_name)
-    print idc_name_list
+#    print idc_name_list
     if nameInput in idc_name_list:
+        logger.error(str(request.user) + ' - ' +'idc name'+' '+nameInput +' - '+'exists!')
         return HttpResponse('exist')
     else:
         idc_add = Idc(idc_name=nameInput,remark=msgInput)
         idc_add.save()
+        logger.info( str(request.user)+ ' - '+'add idc name '+nameInput)
         return HttpResponse('ok')
 
 @login_required
 def idc_delete(request,id=None):
     if request.method == 'GET':
         id = request.GET.get('id')
+        idc =Idc.objects.get(id=id)
         Idc.objects.filter(id=id).delete()
+        logger.info(str(request.user)+ ' - '+'delete idc name '+str(idc.idc_name))
         return HttpResponseRedirect('/idc/')
 @login_required
 def idc_update(request):
     if request.method == 'POST':
         remark=request.POST.get('msgInput')
         name=request.POST.get('id')
-        print name,remark
         a=Idc.objects.get(idc_name=name)
         a.remark=remark
         a.save()
+        logger.info(str(request.user)+' - '+'update idc remark '+remark)
         return HttpResponseRedirect('/idc/')
 
 
