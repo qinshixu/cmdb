@@ -1,0 +1,331 @@
+
+{% include 'base.html' %}
+        <div id="page-wrapper" class="gray-bg">
+            <div class="row border-bottom">
+              <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+                  <div class="navbar-header">
+                      <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
+                      <form role="search" class="navbar-form-custom" method="get" action="">
+                      </form>
+                  </div>
+                  {% include 'base1.html' %}
+              </nav>
+            </div>
+            <div class="row" style='margin-top:20px'>
+            	<button class="btn btn-primary" id='addmacBtn' style='margin-left:20px'>添加用户</button>
+            </div>
+
+            <div class="row">
+                            <div class="col-lg-12">
+                                <div class="panel panel-default" style='margin-top:20px;'>
+            <!--                         <div class="panel-heading">
+                                       idc信息
+                                        <button class='btn btn-default' id='addIdc'>添加idc</button>
+                                    </div> -->
+                                    <!-- /.panel-heading -->
+                                    <div class="panel-body">
+                                        <div class="dataTable_wrapper">
+
+
+                                            <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                                                <thead>
+                                                    <tr>
+                                                        <th>用户名</th>
+                                                        <th>邮箱</th>
+                                                        <th>是否激活</th>
+                                                        <th>登录时间</th>
+                                                        <th>创建时间</th>
+                                                        <th>操作</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                 {%for userinfo in all_user %}
+            <tr>
+            	<td id="user">{{userinfo.username}}</td>
+            	<td id="email">{{userinfo.email}}</td>
+            	<td id="is_active">{{userinfo.is_active}}</td>
+            	<td id="last_login">{{userinfo.last_login}}</td>
+            	<td id="date_joined">{{userinfo.date_joined}}</td>
+            	<td>
+            <span class=" btn btn-xs btn-primary" onclick="user_start({{ userinfo.id }});">启用</span>
+            <span class="btn btn-xs btn-warning" onclick="user_forbbid({{ userinfo.id }});">禁用</span>
+            <span class=" btn btn-xs btn-danger" onclick="user_del({{ userinfo.id }});">删除</span>
+            	</td>
+            </tr>
+                 {%endfor%}
+                                            </tbody>
+                                            </table>
+
+                                        </div>
+                                        <!-- /.table-responsive -->
+                                    </div>
+                                    <!-- /.panel-body -->
+                                </div>
+                                <!-- /.panel -->
+                            </div>
+            </div>
+
+
+
+  {% include 'base2.html' %}
+          </div>
+</div>
+
+<div class="modal fade" id='addmacModal'>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">添加用户</h4>
+      </div>
+      <div class="modal-body">
+<form class="form-horizontal"  method="post" action="/adduser">
+  <div class="form-group">
+    <label for="inputEmail3" class="col-sm-2 control-label">用户名</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id='username' required="length[1~20]">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="inputEmail3" class="col-sm-2 control-label">密码</label>
+    <div class="col-sm-10">
+      <input type="password" class="form-control" id='password' required="length[4~20]">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="inputEmail3" class="col-sm-2 control-label">确认密码</label>
+    <div class="col-sm-10">
+      <input type="password" class="form-control" id='password2' required="length[4~20]">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="inputPassword3" class="col-sm-2 control-label">邮箱地址</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id='emailaddr' required="length[4~20]">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="inputPassword3" class="col-sm-2 control-label">是否激活</label>
+    <div class="col-sm-10">
+    <select id="active"  class="form-control">
+			<option>1</option>
+      <option>0</option>
+    </select>
+    </div>
+  </div>
+
+  <div style="color:#F00" text-align:'center' id='errorInfo'>
+
+  </div>
+
+</form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-primary"  onclick="useradd(this);" >确认</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div>
+<div class="modal fade" id='tipModal'>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Modal title</h4>
+      </div>
+      <div class="modal-body">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">确认</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div>
+
+
+<script>
+$('#tipModal').on('hide.bs.modal',function(){
+    location.reload()
+})
+$(function(){
+       var oLanguage={
+    "oAria": {
+        "sSortAscending": ": 升序排列",
+        "sSortDescending": ": 降序排列"
+    },
+    "oPaginate": {
+        "sFirst": "首页",
+        "sLast": "末页",
+        "sNext": "下页",
+        "sPrevious": "上页"
+    },
+    "sEmptyTable": "没有相关记录",
+    "sInfo": "第 _START_ 到 _END_ 条记录，共 _TOTAL_ 条",
+    "sInfoEmpty": "第 0 到 0 条记录，共 0 条",
+    "sInfoFiltered": "(从 _MAX_ 条记录中检索)",
+    "sInfoPostFix": "",
+    "sDecimal": "",
+    "sThousands": ",",
+    "sLengthMenu": "每页显示条数: _MENU_",
+    "sLoadingRecords": "正在载入...",
+    "sProcessing": "正在载入...",
+    "sSearch": "搜索:",
+    "sSearchPlaceholder": "",
+    "sUrl": "",
+    "sZeroRecords": "没有相关记录"
+}
+$.fn.dataTable.defaults.oLanguage=oLanguage;
+$('#dataTables-example').DataTable({
+        responsive: true,
+        // iDisplayLength:3
+});
+});
+var pro = 10
+var timer = null
+timer = setInterval(function(){
+    if (pro<100) {
+
+    pro = pro*1.5
+
+    $('#progress-reboot').css('width',pro+'%')
+    }else{
+        clearInterval(timer)
+        $('#progress-reboot').addClass('hide')
+    }
+
+},100)
+var is_right = true
+setInterval(function(){
+    var t = $('#alertText')
+    var left = parseInt(t.css('left'))
+    var val
+    if (is_right) {
+        if (left<300) {
+            val = left+1
+            t.css('left',val)
+        }else{
+            is_right = false
+        }
+    }else{
+        if (left>250) {
+            val = left-1
+            t.css('left',val)
+        }else{
+            is_right = true
+        }
+
+    }
+    // if (left<300&&left>250) {
+    //     t.css('left',left+1)
+    // };
+},50)
+</script>
+
+
+<script>
+$('#addmacBtn').click(function(){
+$('#addmacModal').modal('show')
+})
+    $(document).on('click','.deletemac',function(){
+      var id = $(this).data('id')
+      $.get('/deletemac?id='+id,function(res){
+        if (res == 'ok') {
+          location.reload()
+        };
+      })
+    })
+$('#confirmAddmacBtn').click(function(){
+var is_val = true
+$('#addmacForm').find('input').each(function(i,v){
+  if (!$(v).val()) {
+    $(v).after('<span class="text-danger">必填字段</span>')
+    is_val = false
+  }else{
+    $(v).next().remove()
+  }
+})
+if (is_val) {
+
+$.get('/addmac',$('#addmacForm').serialize(),function(data){
+  if (data=='ok') {
+    $('#tipModal').find('.modal-body').html('添加成功').end().modal('show')
+  };
+})
+};
+
+})
+
+</script>
+
+<script type="text/javascript">
+function useradd(ele){
+if($('#username').val()&&$('#password').val()&&$('#password2').val()&&$('#emailaddr').val()&&$('#active').val()){
+  if($('#password').val() == $('#password2').val()){
+$.ajax({
+url:"/adduser",
+data:{username:$('#username').val(),email:$('#emailaddr').val(),password:$('#password').val(),is_active:$('#active').val()},
+success:function(data){
+ if (data=='ok') {
+ $('#tipModal').find('.modal-body').html('添加成功').end().modal('show')
+       }
+ else {
+   $('#errorInfo').html('*用户名已经存在!*')
+ }
+  }
+});
+}
+else {
+  $('#errorInfo').html('*两次密码不匹配*')
+}
+}
+else {
+  $('#errorInfo').html('*请输入完整信息*')
+}
+}
+</script>
+<script type="text/javascript">
+
+function user_del(id){
+  $.ajax({
+    url:"/user/user_delete/",
+    data:{id:id},
+  success:function(data){
+  if (data=='ok') {
+      $('#tipModal').find('.modal-body').html('删除成功').end().modal('show')
+}
+  else{
+    $('#tipModal').find('.modal-body').html('删除失败').end().modal('show')
+  }
+}
+});
+}
+function user_forbbid(id){
+  $.ajax({
+    url:"/user/user_forbidden/",
+    data:{id:id},
+  success:function(data){
+  if (data=='ok') {
+      $('#tipModal').find('.modal-body').html('禁用成功').end().modal('show')
+}
+  else{
+    $('#tipModal').find('.modal-body').html('禁用失败').end().modal('show')
+  }
+}
+});
+}
+function user_start(id){
+  $.ajax({
+    url:"/user/user_start/",
+    data:{id:id},
+  success:function(data){
+  if (data=='ok') {
+      $('#tipModal').find('.modal-body').html('启用成功').end().modal('show')
+}
+  else{
+    $('#tipModal').find('.modal-body').html('启用失败').end().modal('show')
+  }
+}
+});
+}
+</script>

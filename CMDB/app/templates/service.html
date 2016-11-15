@@ -49,7 +49,9 @@
                                 <!-- /.panel -->
                             </div>
             </div>
-
+<h1 style="text-align:center">
+     <i id='icon'></i>
+</h1>
 
 
 
@@ -100,12 +102,15 @@
 $(function(){
     $('.reboot').click(function(){
        alert('重启需要等待一段时间，请不要点击其他页面！');
+       $('#icon').addClass('fa fa-circle-o-notch fa-spin');
+
      }
    )
  });
  $(function(){
      $('.update').click(function(){
         alert('更新需要等待一段时间，请不要点击其他页面！');
+        $('#icon').addClass('fa fa-circle-o-notch fa-spin');
       }
     )
   });

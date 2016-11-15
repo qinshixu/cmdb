@@ -46,6 +46,11 @@
                                 </div>
                                 <!-- /.panel -->
                             </div>
+
+  <h1 style="text-align:center">
+     <i id='icon'></i>
+  </h1>
+
 <div  id="result" style="color:#3CB371">
 <p style="color:#3CB371" >执行结果:</p>
 <textarea style="background-color:transparent; BORDER-BOTTOM: 0px solid; BORDER-LEFT: 0px solid; BORDER-RIGHT: 0px solid; BORDER-TOP: 0px solid  " cols="100%" rows="20%" class="opration_result" readonly="readonly">
@@ -104,12 +109,14 @@
 $(function(){
     $(".reboot").click(function(){
        alert('重启需要等待一段时间，请不要点击其他页面！');
+       $('#icon').addClass('fa fa-circle-o-notch fa-spin');
      }
    )
  });
  $(function(){
      $(".update").click(function(){
         alert('更新需要等待一段时间，请不要点击其他页面！');
+        $('#icon').addClass('fa fa-circle-o-notch fa-spin');
       }
     )
   });

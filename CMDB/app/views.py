@@ -78,6 +78,8 @@ def index(request):
     idc_num = total_idc["idc_name__count"]
     total_host = HostList.objects.aggregate(Count('hostname'))
     host_num = total_host["hostname__count"]
+    login_user = request.user
+    print user
     return render_to_response("index.html",locals())
 def get_clinet_ip(request):
     try:
@@ -100,17 +102,26 @@ def authin(request):
         total_host = HostList.objects.aggregate(Count('hostname'))
         host_num = total_host["hostname__count"]
         #print request.user,user,total_idc,idc_num,host_num
-        if user is not None:
-            auth.login(request,user)
-            P = Login_Record(name=username,ip=real_ip,status=1)
-            P.save()
-            logger.info(username +' - '+ real_ip + ' - login server' )
-            return  render_to_response('index.html',{'login_user':request.user,'idc_num':idc_num,'host_num':host_num})
+        User_Info = User.objects.filter(username=username)
+        for i in User_Info:
+            Status = i.is_active
+        if Status == True:
+            if user is not None:
+                auth.login(request,user)
+                P = Login_Record(name=username,ip=real_ip,status=1)
+                P.save()
+                logger.info(username +' - '+ real_ip + ' - login server' )
+                return  render_to_response('index.html',{'login_user':request.user,'idc_num':idc_num,'host_num':host_num})
+            else:
+                P = Login_Record(name=username,ip=real_ip)
+                P.save()
+                logger.error(username +' - '+ real_ip + ' - login failed' )
+                return render_to_response('login.html',{'login_err':'Wrong username or password!'})
         else:
             P = Login_Record(name=username,ip=real_ip)
             P.save()
-            logger.error(username +' - '+ real_ip + ' - login failed' )
-            return render_to_response('login.html',{'login_err':'Wrong username or password!'})
+            logger.error(username +' - '+ real_ip + ' - user is forbbiden' )
+            return render_to_response('login.html',{'login_err':'user is forbbiden!'})
     else:
         P = Login_Record(name=username,ip=real_ip)
         P.save()
@@ -627,3 +638,59 @@ def service_result(request):
             return render_to_response('service_result.html',locals())
     else:
         return render_to_response('service.html',locals())
+
+def user(request):
+    all_user = User.objects.all()
+    return render_to_response("user.html",locals())
+def adduser(request):
+    if request.method == 'GET':
+        username = request.GET['username']
+        email = request.GET['email']
+        password = request.GET['password']
+        is_active = request.GET['is_active']
+        try:
+            userinfo = User.objects.get(username=username)
+            return HttpResponse('False')
+        except:
+            user = User()
+            user.username=username
+            user.set_password(password)
+            user.email=email
+            user.is_active = is_active
+            user.save()
+            return HttpResponse('ok')
+def user_delete(request,id=None):
+    if request.method == 'GET':
+        id = request.GET.get('id')
+        try:
+            UserInfo = User.objects.get(id=id)
+            User.objects.filter(id=id).delete()
+            logger.error(str(request.user)+' - '+'deluser'+ ' - username:'+str(UserInfo.username))
+            return HttpResponse('ok')
+        except:
+            return HttpResponse('False')
+def user_forbidden(request,id=None):
+    if request.method == 'GET':
+        id = request.GET.get('id')
+        try:
+            UserInfo = User.objects.get(id=id)
+            User.objects.filter(id=id).update(is_active=0)
+            logger.info(str(request.user)+' - '+'forbidden_user'+ ' - username:'+str(UserInfo.username))
+            return HttpResponse('ok')
+        except:
+            return HttpResponse('False')
+def user_start(request,id=None):
+    if request.method == 'GET':
+        id = request.GET.get('id')
+        try:
+            UserInfo = User.objects.get(id=id)
+            User.objects.filter(id=id).update(is_active=1)
+            logger.info(str(request.user)+' - '+'start_user'+ ' - username:'+str(UserInfo.username))
+            return HttpResponse('ok')
+        except:
+            return HttpResponse('False')
+def user_info(request):
+    if request.method == 'GET':
+        print request.user
+        userinfo = User.objects.get(username=request.user)
+        return render_to_response("user_info.html",locals())
