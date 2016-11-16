@@ -1,0 +1,103 @@
+{% include 'base.html' %}
+        <div id="page-wrapper" class="gray-bg">
+            <div class="row border-bottom">
+              <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+                  <div class="navbar-header">
+                      <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
+                      <form role="search" class="navbar-form-custom" method="get" action="">
+                      </form>
+                  </div>
+                  {% include 'base1.html' %}
+              </nav>
+            </div>
+
+<div class="row">
+                <div class="col-lg-5">
+                    <div class="panel panel-default" style='margin-top:20px;'>
+<!--                         <div class="panel-heading">
+                           idc信息
+                            <button class='btn btn-default' id='addIdc'>添加idc</button>
+                        </div> -->
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+
+
+<div style="width:100%">
+  <form class="form-horizontal"  method="post" action="/userpasswd">
+    <div class="form-group">
+      <label for="inputEmail3" class="col-sm-2 control-label">用户名</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" id='username' value="{{ user }}"  placeholder=username required="length[1~20]">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="inputEmail3" class="col-sm-2 control-label">旧密码</label>
+      <div class="col-sm-10">
+        <input type="password" class="form-control" id='old_password'  placeholder="password" required="length[4~20]">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="inputEmail3" class="col-sm-2 control-label">新密码</label>
+      <div class="col-sm-10">
+        <input type="password" class="form-control" id='new_password' placeholder="NewPassword" required="length[4~20]">
+      </div>
+    </div>
+    <div style="color:#F00" text-align:'right' id='errorInfo'>
+    </div>
+    <span style="display:block;text-align:right">
+    <input type="reset" class="btn btn-default" value="重置">
+   <input type="button" class="btn btn-primary"  onclick="userpasswd(this);" value="确认">
+   </span>
+
+  </form>
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                    <!-- /.panel -->
+                </div>
+</div>
+<div class="modal fade" id='tipModal'>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Modal title</h4>
+      </div>
+      <div class="modal-body">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">确认</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div>
+
+
+
+{% include 'base2.html' %}
+    </div>
+</div>
+<script type="text/javascript">
+function userpasswd(ele){
+if($('#username').val()&&$('#old_password').val()&&$('#new_password').val()){
+$.ajax({
+url:"/result_passwd",
+data:{username:$('#username').val(),old_password:$('#old_password').val(),new_password:$('#new_password').val()},
+success:function(data){
+ if (data=='ok') {
+ $('#tipModal').find('.modal-body').html('修改成功').end().modal('show')
+       }
+if (data=='False') {
+  $('#errorInfo').html('*密码不匹配!*')
+}
+if (data=='No') {
+   $('#errorInfo').html('*权限不够!*')
+ }
+  }
+});
+}
+else {
+  $('#errorInfo').html('*请输入完整信息*')
+}
+}
+</script>

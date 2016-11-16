@@ -638,10 +638,11 @@ def service_result(request):
             return render_to_response('service_result.html',locals())
     else:
         return render_to_response('service.html',locals())
-
+@login_required
 def user(request):
     all_user = User.objects.all()
     return render_to_response("user.html",locals())
+@login_required
 def adduser(request):
     if request.method == 'GET':
         username = request.GET['username']
@@ -659,38 +660,89 @@ def adduser(request):
             user.is_active = is_active
             user.save()
             return HttpResponse('ok')
+@login_required
 def user_delete(request,id=None):
     if request.method == 'GET':
         id = request.GET.get('id')
-        try:
-            UserInfo = User.objects.get(id=id)
-            User.objects.filter(id=id).delete()
-            logger.error(str(request.user)+' - '+'deluser'+ ' - username:'+str(UserInfo.username))
-            return HttpResponse('ok')
-        except:
-            return HttpResponse('False')
+        UserInfo = User.objects.get(username=request.user)
+        if UserInfo.is_superuser:
+            try:
+                UserInfo = User.objects.get(id=id)
+                User.objects.filter(id=id).delete()
+                logger.error(str(request.user)+' - '+'deluser'+ ' - username:'+str(UserInfo.username))
+                return HttpResponse('ok')
+            except:
+                return HttpResponse('False')
+        else:
+                return HttpResponse('No')
+@login_required
 def user_forbidden(request,id=None):
     if request.method == 'GET':
         id = request.GET.get('id')
-        try:
-            UserInfo = User.objects.get(id=id)
-            User.objects.filter(id=id).update(is_active=0)
-            logger.info(str(request.user)+' - '+'forbidden_user'+ ' - username:'+str(UserInfo.username))
-            return HttpResponse('ok')
-        except:
-            return HttpResponse('False')
+        UserInfo = User.objects.get(username=request.user)
+        if UserInfo.is_superuser:
+            try:
+                UserInfo = User.objects.get(id=id)
+                User.objects.filter(id=id).update(is_active=0)
+                logger.info(str(request.user)+' - '+'forbidden_user'+ ' - username:'+str(UserInfo.username))
+                return HttpResponse('ok')
+            except:
+                return HttpResponse('False')
+        else:
+                return HttpResponse('No')
+@login_required
 def user_start(request,id=None):
     if request.method == 'GET':
         id = request.GET.get('id')
-        try:
-            UserInfo = User.objects.get(id=id)
-            User.objects.filter(id=id).update(is_active=1)
-            logger.info(str(request.user)+' - '+'start_user'+ ' - username:'+str(UserInfo.username))
-            return HttpResponse('ok')
-        except:
-            return HttpResponse('False')
+        UserInfo = User.objects.get(username=request.user)
+        if UserInfo.is_superuser:
+            try:
+                UserInfo = User.objects.get(id=id)
+                User.objects.filter(id=id).update(is_active=1)
+                logger.info(str(request.user)+' - '+'start_user'+ ' - username:'+str(UserInfo.username))
+                return HttpResponse('ok')
+            except:
+                return HttpResponse('False')
+        else:
+            return HttpResponse('No')
+@login_required
 def user_info(request):
     if request.method == 'GET':
         print request.user
         userinfo = User.objects.get(username=request.user)
         return render_to_response("user_info.html",locals())
+@login_required
+def user_passwd(request):
+    if request.method == 'GET':
+        userinfo = User.objects.get(username=request.user)
+        if userinfo.is_superuser:
+            return render_to_response("user_passwd.html")
+        else:
+            user = request.user
+            return render_to_response("user_passwd.html",locals())
+def result_passwd(request):
+    if request.method == 'GET':
+        username = request.GET['username']
+        old_password = request.GET['old_password']
+        new_password = request.GET['new_password']
+        userinfo = User.objects.get(username=request.user)
+        user = auth.authenticate(username=username,password=old_password)
+        if user is not None:
+            if username == userinfo.username:
+                newuser = User.objects.get(username=username)
+                newuser.set_password(new_password)
+                newuser.save()
+                logger.error(str(request.user)+' - '+'ChangePassword'+ ' - success!')
+                return HttpResponse('ok')
+            else:
+                logger.error(str(request.user)+' - '+'ChangePassword'+ ' - privileges error!')
+                return HttpResponse('No')
+        elif userinfo.is_superuser:
+            newuser = User.objects.get(username=username)
+            newuser.set_password(new_password)
+            newuser.save()
+            logger.error(str(request.user)+' - '+'ChangePassword'+ ' - success!')
+            return HttpResponse('ok')
+        else:
+            logger.error(str(request.user)+' - '+'ChangePassword'+ ' - Password error!')
+            return HttpResponse('False')

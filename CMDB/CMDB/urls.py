@@ -61,5 +61,7 @@ urlpatterns = patterns('',
     (r'^user/user_forbidden/$',user_forbidden),
     (r'^user/user_start/$',user_start),
     (r'^userinfo',user_info),
+    (r'^userpasswd',user_passwd),
+    (r'^result_passwd',result_passwd),
     (r'accounts/login/$','django.contrib.auth.views.login',{'template_name':'login.html'}),
 )
