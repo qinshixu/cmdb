@@ -236,7 +236,7 @@ def download_result(request):
         print ret
 #        ret=os.popen(cmd).readlines()
         if ret[hostname]:
-            salt_minior_dir='/var/cache/salt/master/minions/u1/files'
+            salt_minior_dir='/var/cache/salt/master/minions/'+str(hostname)+'/files'
             fullpath=salt_minior_dir+filepath
             f=open(fullpath)
             data=f.read()
@@ -556,7 +556,7 @@ def oprationfile_result(request):
     all_host = HostList.objects.all()
     hostname = request.POST.get('hostInput')
     path = request.POST.get('filepath')
-    salt_minior_dir='/var/cache/salt/master/minions/u1/files'
+    salt_minior_dir='/var/cache/salt/master/minions/'+str(hostname)+'/files'
     salt_path=salt_minior_dir+path
     print path,hostname
     if os.path.exists(salt_path):
@@ -590,7 +590,7 @@ def oprationfile_check(request):
     path=request.GET.get('path')
     filename=request.GET.get('filename')
     print hostname,path,filename
-    salt_minior_dir='/var/cache/salt/master/minions/u1/files'
+    salt_minior_dir='/var/cache/salt/master/minions/'+str(hostname)+'/files'
     filepath=path+filename
     salt_filepath=salt_minior_dir+path+filename
     print filepath
@@ -607,7 +607,7 @@ def oprationfile_update(request):
     filepath=request.POST.get('filepath')
     content=request.POST.get('content')
     content=content.encode("utf-8")
-    salt_minior_dir='/var/cache/salt/master/minions/u1/files'
+    salt_minior_dir='/var/cache/salt/master/minions/'+str(hostname)+'/files'
     salt_filepath=salt_minior_dir+filepath
     path=os.path.dirname(filepath)+'/'
     f=open(salt_filepath,'w')
