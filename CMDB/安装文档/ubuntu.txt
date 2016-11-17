@@ -101,6 +101,15 @@ device = eth0 ####因为不确定有些系统用的是eth0.有些用的是em。�
 python manage.py syncdb
 python manage.py migrate app
 备注：输入的账号密码是登录网站的账号密码：
+CREATE TABLE `app_login_record` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(40) NOT NULL,
+  `loginTime` datetime NOT NULL,
+  `ip` char(15) NOT NULL,
+  `status` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=100 DEFAULT CHARSET=utf8  创建新加的表（models里面写了生成表的语句，未生效，原因待查）
+
 9、安装成功启动登录：
 启动步骤：
 nohup ./manage.py runserver 0.0.0.0:80 &           
