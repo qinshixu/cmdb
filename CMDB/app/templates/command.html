@@ -64,7 +64,7 @@ function command_result(ele){
    if($('#hostname').val()&&$('#Command').val()){
      var id=$(ele).attr("id");
   $.ajax({
-    url:"/command_result",
+    url:"/command_result/",
     data:{hostname:$('#hostname').val(),command:$('#Command').val()},
     success:function(data){
         if (data=='ok'){
