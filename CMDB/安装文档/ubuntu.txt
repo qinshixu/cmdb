@@ -22,6 +22,14 @@ apt-get update
         mysql.db : cmdb
         mysql.pass: '123456'
         mysql.host: '127.0.0.1'
+        file_recv: True
+        file_recv_max_size: 100
+        file_roots:
+          base:
+            - /
+          dev:
+           - /
+  
     cd /etc/salt/master.d/
     vim api.conf
       rest_cherrypy:
