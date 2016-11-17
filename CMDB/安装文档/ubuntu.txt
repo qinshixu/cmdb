@@ -28,7 +28,8 @@ apt-get update
         port: 8888
         ssl_crt: /etc/pki/tls/certs/localhost.crt
         ssl_key: /etc/pki/tls/certs/localhost.key
-    vim external_auth:
+    vim eauth.conf 
+    external_auth:
       pam:
          xiaoluo:
             - .*
@@ -74,10 +75,44 @@ return:
 
 验证token：
 
-curl -k https://10.0.1.148:8888/ -H "Accept: application/x-yaml" -H "X-Auth-Token:ea513cdcf1a9398ebbb0a81ca06214ee9a42dd4a"  -d client='local' -d tgt='*' -d fun='test.ping'
+curl -k https://10.0.1.148:8888/ -H "Accept: application/x-yaml" -H "X-Auth-Token:bc9b0b2b2ab0286b3eef95b99cd1e44aee4b6cd4"  -d client='local' -d tgt='*' -d fun='test.ping'
 return:
 - u1: true
-            
+服务端测试salt：
+ salt '*' test.ping
+建立mysql 数据库并且授权账号登录：
+create database cmdb default charset=utf8; 
+create database monitor default charset=utf8;
+8、修改配置文件config.ini(所在目录：/web/CMDB/app/backend/):
+[db]
+db_host = 127.0.0.1  
+db_port = 3306
+db_user = root
+db_pass = 123456
+db_name = cmdb
+[saltstack]
+url = https://192.168.63.89:8888
+user = xiaoluo
+pass = 123456
+[network]
+device = eth0 ####因为不确定有些系统用的是eth0.有些用的是em。根据自己的需求填
+****备注上面是数据库的账号管理密码等，下面是salt-api的账号密码：
+ 8、数据库创建：
+python manage.py syncdb
+python manage.py migrate app
+备注：输入的账号密码是登录网站的账号密码：
+CREATE TABLE `app_login_record` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(40) NOT NULL,
+  `loginTime` datetime NOT NULL,
+  `ip` char(15) NOT NULL,
+  `status` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=100 DEFAULT CHARSET=utf8  创建新加的表（models里面写了生成表的语句，未生效，原因待查）
+
+9、安装成功启动登录：
+启动步骤：
+nohup ./manage.py runserver 0.0.0.0:80 &           
   
         
       
