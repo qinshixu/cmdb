@@ -17,9 +17,9 @@ import logging
 
 
 
-db = mysql.connect(user="root", passwd="123456", db="monitor", charset="utf8")
-db.autocommit(True)
-c = db.cursor()
+#db = mysql.connect(user="root", passwd="123456", db="monitor", charset="utf8")
+#db.autocommit(True)
+#c = db.cursor()
 
 client=salt.client.LocalClient()
 
