@@ -57,6 +57,19 @@
     <a style='color:white' onclick="check_file(this);">
         <input type="hidden" value={{k}} class='filename'>查看</a>
 </span>&nbsp;
+<span  class="btn btn-xs btn-primary" data-id='6'>
+<a style='color:white' onclick="downfile(this)">
+<form style="display:hidden"  method="post" action="/download_result/" id="thisForm">
+<input type="hidden" value={{ hostname }} name='hostname'>
+<input type="hidden" value={{ path }} name='path'>
+<input type="hidden" value={{ k }} name='filename'>
+</form>
+下载</a>
+</span>
+<!--span  class="btn btn-xs btn-primary" data-id='6'>
+  <a style='color:white' onclick="down_file(this);" >
+      <input type="hidden" value={{k}} class='filename'>下载</a>
+</span-->&nbsp;
 <span class="btn btn-xs btn-warning" data-id='6'>
  <a style='color:white' onclick="update_file(this);" >
      <input type="hidden" value={{k}} class='filename'>编辑</a>
@@ -156,5 +169,24 @@ function update_file(ele){
        }
 }
 });
+}
+function down_file(ele){
+  var hostname = $('#hostname').val();
+  var path = $('#path').val();
+  var filename = $(ele).find('.filename').val();
+  var dir = path + filename
+  $.ajax({
+      type:"POST",
+      dataType:"html",
+      url:"/download_result/",
+      cache: false,
+      data:{hostname:hostname,dir:dir},
+      success: function(result, statues, xml){
+
+      },
+});
+}
+function downfile(ele){
+    $('#thisForm').submit()
 }
 </script>
