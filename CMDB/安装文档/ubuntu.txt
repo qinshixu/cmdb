@@ -28,7 +28,8 @@ apt-get update
         port: 8888
         ssl_crt: /etc/pki/tls/certs/localhost.crt
         ssl_key: /etc/pki/tls/certs/localhost.key
-    vim external_auth:
+    vim eauth.conf 
+    external_auth:
       pam:
          xiaoluo:
             - .*
