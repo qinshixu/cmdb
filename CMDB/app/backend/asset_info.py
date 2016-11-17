@@ -9,9 +9,9 @@ def get_server_asset_info(tgt,url,user,passwd,device):
     '''
     Salt API得到资产信息，进行格式化输出
     '''
+    asset_info=[]
     cf = ConfigParser.ConfigParser()
     cf.read("config.ini")
-    global asset_info 
     info = []
     sapi = SaltAPI(url=url,username=user,password=passwd)
     ret = sapi.remote_noarg_execution(tgt,'grains.items')
@@ -20,7 +20,7 @@ def get_server_asset_info(tgt,url,user,passwd,device):
     manufacturer = ret['manufacturer']
     info.append(manufacturer)
     productname = ret['productname']
-    info.append(productname)  
+    info.append(productname)
     serialnumber = ret['serialnumber']
     info.append(serialnumber)
     cpu_model = ret['cpu_model']

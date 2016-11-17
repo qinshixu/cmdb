@@ -42,14 +42,14 @@ class HostList(models.Model):
 class ServerAsset(models.Model):
     manufacturer = models.CharField(max_length=20, verbose_name=u'厂商')
     productname = models.CharField(max_length=30, verbose_name=u'产品型号')
-    service_tag = models.CharField(max_length=80, unique=True, verbose_name=u'序列号')
+    service_tag = models.CharField(max_length=80, verbose_name=u'序列号')
     cpu_model = models.CharField(max_length=50, verbose_name=u'CPU型号')
     cpu_nums = models.PositiveSmallIntegerField(verbose_name=u'CPU线程数')
     cpu_groups = models.PositiveSmallIntegerField(verbose_name=u'CPU物理核数')
     mem = models.CharField(max_length=100, verbose_name='内存大小')
     disk = models.CharField(max_length=300, verbose_name='硬盘大小')
     hostname = models.CharField(max_length=30, verbose_name=u'主机名')
-    ip = models.CharField(max_length=20, verbose_name=u'IP地址')
+    ip = models.CharField(max_length=20, unique=True,verbose_name=u'IP地址')
     os = models.CharField(max_length=20, verbose_name=u'操作系统')
     def __unicode__(self):
         return u'%s - %s' %(self.ip, self.hostname )

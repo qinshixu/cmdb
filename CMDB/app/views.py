@@ -448,10 +448,10 @@ def asset_auto(request):
     return render_to_response("asset_auto.html",locals())
 @login_required
 def asset_auto_result(request):
-     if request.method == 'GET':
-	ret_api = saltstack()
-	try:
-	    client = request.GET.get('client')
+    if request.method == 'GET':
+        ret_api = saltstack()
+        try:
+            client = request.GET.get('client')
             result = get_server_asset_info(client,ret_api["url"],ret_api["user"],ret_api["passwd"],ret_api["device"])
             result_data = ServerAsset()
             result_data.manufacturer = result[0][0]
@@ -466,12 +466,12 @@ def asset_auto_result(request):
             result_data.ip = result[0][9][0]
             result_data.os = result[0][10]
             result_data.save()
-	except:
-	    print "print check you asset"
-	    return HttpResponse('ok')
-	else:
             data = json.dumps(result)
             return HttpResponse(data)
+        except Exception,e:
+            print str(e)
+            print "print check you asset"
+            return HttpResponse('ok')
 @login_required
 def asset_delete(request,id=None):
     if request.method == 'GET':
