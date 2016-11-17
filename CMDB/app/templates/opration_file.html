@@ -16,7 +16,11 @@
     <label for="exampleInputName2">主机名</label>
     <select class="form-control" name="hostInput" id="hostname">
       {% for host in all_host %}
-      <option>{{ host.hostname }}</options>
+         {% if host.hostname  = hostname %}
+                <option selected="selected">{{ hostname }}</option>
+            {% else %}
+                <option>{{ host.hostname }}</option>
+            {% endif %}
         {% endfor %}
     </select>
   </div>
