@@ -95,19 +95,19 @@ def authin(request):
     real_ip = get_clinet_ip(request)
     logger.info(username +' - '+ real_ip + ' - connect server' )
     if username and password is not  None:
-        total_idc =Idc.objects.aggregate(Count('idc_name'))
-        idc_num = total_idc["idc_name__count"]
+        userinfo = User.objects.get(username=username)
         user = auth.authenticate(username=username,password=password)
-        total_host = HostList.objects.aggregate(Count('hostname'))
-        host_num = total_host["hostname__count"]
-        login_user = request.user
-        userinfo = User.objects.get(username=request.user)
-        login_info = Login_Record.objects.filter(status=1).order_by("-loginTime")[0:6]
         if userinfo.is_active:
             if user is not None:
                 auth.login(request,user)
                 P = Login_Record(name=username,ip=real_ip,status=1)
                 P.save()
+                total_idc =Idc.objects.aggregate(Count('idc_name'))
+                idc_num = total_idc["idc_name__count"]
+                total_host = HostList.objects.aggregate(Count('hostname'))
+                host_num = total_host["hostname__count"]
+                login_user = username
+                login_info = Login_Record.objects.filter(status=1).order_by("-loginTime")[0:6]
                 logger.info(username +' - '+ real_ip + ' - login server' )
                 return  render_to_response('index.html',locals())
             else:
