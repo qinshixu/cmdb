@@ -1,0 +1,106 @@
+{% include 'base.html' %}
+        <div id="page-wrapper" class="gray-bg">
+            <div class="row border-bottom">
+              <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+                  <div class="navbar-header">
+                      <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
+                      <form role="search" class="navbar-form-custom" method="get" action="">
+                      </form>
+                  </div>
+                  {% include 'base1.html' %}
+              </nav>
+            </div>
+            <div class="row" style='margin-top:20px'>
+                 <div class="col-lg-3 col-md-6">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-support fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div class="huge">{{idc_num}}</div>
+                                    <div>IDC总数</div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="/idc">
+                            <div class="panel-footer">
+                                <span class="pull-left">查看全部</span>
+                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                <div class="clearfix"></div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+               <div class="col-lg-3 col-md-6">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-tasks fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div class="huge">{{host_num}}</div>
+                                    <div>机器总数</div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="/asset">
+                            <div class="panel-footer">
+                                <span class="pull-left">查看全部</span>
+                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                <div class="clearfix"></div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-comments fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div class="huge">2</div>
+                                    <div>任务编排</div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="/job">
+                            <div class="panel-footer">
+                                <span class="pull-left">查看全部</span>
+                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                <div class="clearfix"></div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-users fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div class="huge">1</div>
+                                    <div>在线用户</div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="#">
+                            <div class="panel-footer">
+                                <span class="pull-left">{{login_user}}</span>
+                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                <div class="clearfix"></div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+          </div>
+</div>
+</body>
+          {% include 'base2.html' %}
+</html>

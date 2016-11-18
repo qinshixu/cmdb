@@ -73,13 +73,12 @@ def date_result(data):
 @login_required
 def index(request):
     total_idc =Idc.objects.aggregate(Count('idc_name'))
-    #for k,v in total_idc.items():
-    #    print k,v
     idc_num = total_idc["idc_name__count"]
     total_host = HostList.objects.aggregate(Count('hostname'))
     host_num = total_host["hostname__count"]
     login_user = request.user
-    print user
+    userinfo = User.objects.get(username=request.user)
+    login_info = Login_Record.objects.filter(status=1).order_by("-loginTime")[0:6]
     return render_to_response("index.html",locals())
 def get_clinet_ip(request):
     try:
@@ -101,17 +100,16 @@ def authin(request):
         user = auth.authenticate(username=username,password=password)
         total_host = HostList.objects.aggregate(Count('hostname'))
         host_num = total_host["hostname__count"]
-        #print request.user,user,total_idc,idc_num,host_num
-        User_Info = User.objects.filter(username=username)
-        for i in User_Info:
-            Status = i.is_active
-        if Status == True:
+        login_user = request.user
+        userinfo = User.objects.get(username=request.user)
+        login_info = Login_Record.objects.filter(status=1).order_by("-loginTime")[0:6]
+        if userinfo.is_active:
             if user is not None:
                 auth.login(request,user)
                 P = Login_Record(name=username,ip=real_ip,status=1)
                 P.save()
                 logger.info(username +' - '+ real_ip + ' - login server' )
-                return  render_to_response('index.html',{'login_user':request.user,'idc_num':idc_num,'host_num':host_num})
+                return  render_to_response('index.html',locals())
             else:
                 P = Login_Record(name=username,ip=real_ip)
                 P.save()

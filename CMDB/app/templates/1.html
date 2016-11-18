@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="renderer" content="webkit">
+
+    <title>Jumpserver | 开源跳板机系统</title>
+
+    <link rel="shortcut icon" href="/static/img/facio.ico" type="image/x-icon">
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+<link href="/static/font-awesome/css/font-awesome.css" rel="stylesheet">
+<link href="/static/css/plugins/iCheck/custom.css" rel="stylesheet">
+<link href="/static/css/animate.css" rel="stylesheet">
+<link href="/static/css/style.css" rel="stylesheet">
+<link href="/static/css/colorbox.css" rel="stylesheet">
+<link href="/static/css/vaildator/jquery.validator.css" rel="stylesheet">
+<link href="/static/css/magnific/magnific-popup.css" rel="stylesheet">
+<link href="/static/css/plugins/fullcalendar/fullcalendar.css" rel="stylesheet">
+<link href="/static/css/plugins/dropzone/basic.css" rel="stylesheet">
+<link href="/static/css/plugins/dropzone/dropzone.css" rel="stylesheet">
+    <script src="/static/js/jquery-2.1.1.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+<script src="/static/js/base.js"></script>
+
+<!-- pop windows -->
+<script src="/static/js/jquery.colorbox.js"></script>
+
+<!-- validator js -->
+<script src="/static/js/validator/jquery.validator.js"></script>
+<script src="/static/js/validator/zh_CN.js"></script>
+<script src="/static/js/datapicker/bootstrap-datepicker.js"></script>
+
+
+     
+</head>
+
+<body>
+
+    <div id="wrapper">
+        
+
+
+<nav class="navbar-default navbar-static-side" role="navigation">
+    <div class="sidebar-collapse">
+        <ul class="nav" id="side-menu">
+            
+<li class="nav-header">
+    <div class="dropdown profile-element">
+        <span>
+            <img alt="image" class="img-circle" width="48" height="48" src="/static/img/user.png" />
+        </span>
+        <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+            <span class="clear">
+                <span class="block m-t-xs">
+                    <strong class="font-bold">admin  <span style="color: #8095a8"></span></strong>
+                </span>
+                <span class="text-muted text-xs block">
+                    普通用户 <b class="caret"></b>
+                </span>
+            </span>
+        </a>
+        <ul class="dropdown-menu animated fadeInRight m-t-xs">
+            <li><a value="/juser/user/profile/?id=29" class="iframe_user">个人信息</a></li>
+            <li><a href="/juser/user/update/">修改信息</a></li>
+
+
+
+
+
+
+
+            <li class="divider"></li>
+            <li><a href="/logout/">注销</a></li>
+        </ul>
+    </div>
+
+    <div class="logo-element">
+        JS+
+    </div>
+</li>
+<script>
+    $(".iframe_user").on('click', function(){
+        var url= $(this).attr("value");
+        layer.open({
+            type: 2,
+            title: '个人信息',
+            maxmin: true,
+            shift: 'top',
+            border: [2, 0.3, '#1AB394'],
+            shade: [0.5, '#000000'],
+            shadeClose: true,
+            area : ['800px' , '600px'],
+            content: url
+        });
+    });
+</script>
+
+
+            <li id="juser">
+               <a href="/juser/user/detail/"><i class="fa fa-dashboard"></i> <span class="nav-label">仪表盘</span><span class="label label-info pull-right"></span></a>
+            </li>
+            <li id="jasset">
+               <a href="/jasset/asset/list/"><i class="fa fa-inbox"></i> <span class="nav-label">查看主机</span><span class="label label-info pull-right"></span></a>
+            </li>
+            <li id="file">
+                <a href="#"><i class="fa fa-download"></i> <span class="nav-label">上传下载</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li class="upload"><a href="/file/upload/">文件上传</a></li>
+                    <li class="download"><a href="/file/download/">文件下载</a></li>
+                </ul>
+            </li>
+
+            <li class="special_link">
+                <a href="http://www.jumpserver.org" target="_blank"><i class="fa fa-database"></i> <span class="nav-label">访问官网</span></a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+        <div id="page-wrapper" class="gray-bg">
+            <div class="row border-bottom">
+                
+
+<nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+    <div class="navbar-header">
+        <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
+        <form role="search" class="navbar-form-custom" method="get" action="">
+            <div class="form-group">
+                <input type="text" placeholder="输入搜索..." class="form-control" name="search" id="top-search">
+            </div>
+        </form>
+    </div>
+    <ul class="nav navbar-top-links navbar-right">
+        <li>
+            <span class="m-r-sm text-muted welcome-message">欢迎使用Jumpserver开源跳板机系统</span>
+        </li>
+        <li class="dropdown">
+            <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                 <span class="m-r-sm text-muted welcome-message">帮助</span>
+            </a>
+        </li>
+        <li>
+            <a href="/logout/">
+                <i class="fa fa-sign-out"></i> Log out
+            </a>
+        </li>
+    </ul>
+</nav>
+            </div>
+            
+    <div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-10">
+        <h2>用户详情</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="/">仪表盘</a>
+            </li>
+            <li>
+            
+                <a>用户管理</a>
+            
+            </li>
+            
+            <li class="active">
+                <strong>用户详情</strong>
+            </li>
+            
+        </ol>
+    </div>
+    <div class="col-sm-2">
+    </div>
+</div>
+
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <span class="label label-primary"><b>admin</b></span>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                                <li><a href="#"></a>
+                                </li>
+                                <li><a href="#"></a>
+                                </li>
+                            </ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <div>
+                            <div class="text-left">
+                                <table class="table">
+                                    <tr>
+                                        <td class="text-navy">ID</td>
+                                        <td>29</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-navy">用户名</td>
+                                        <td>admin</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-navy">姓名</td>
+                                        <td>admin</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-navy">权限</td>
+                                        <td>普通用户</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-navy">key</td>
+                                        
+                                        <td><span style="color: #586b7d">NoKey</span></td>
+                                        
+                                    </tr>
+                                    <tr>
+                                        <td class="text-navy">Email</td>
+                                        <td>admin@jumpserver.org</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-navy">激活</td>
+                                        <td>是</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-navy">添加日期</td>
+                                        <td>2016-11-16 16:54:14</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-navy">最后登录</td>
+                                        <td>2016-11-18 14:35:33</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-navy">所在用户组</td>
+                                        <td>
+                                             <table class="table">
+                                                 
+                                             </table>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-navy">授权主机数量</td>
+                                        <td>
+                                            0
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-navy">授权主机组</td>
+                                        <td>
+                                             <table class="table">
+                                                 
+                                             </table>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-navy">授权规则</td>
+                                        <td>
+                                             <table class="table">
+                                                 
+                                             </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>授权主机/组</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                            </ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content ibox-heading">
+                        <h3>用户的所有授权主机</h3>
+                        <small><i class="fa fa-map-marker"></i> 这里包含了用户授权的主机和其映射的系统用户.</small>
+                    </div>
+                    <div class="ibox-content inspinia-timeline">
+                        
+                        
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-4">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>登录记录</h5>
+                            <div class="ibox-tools">
+                                <span class="label label-warning-light">最近登录</span>
+                               </div>
+                        </div>
+                        <div class="ibox-content">
+                            <div id="last">
+
+                                <div class="feed-activity-list" >
+                                    
+                                        <div class="feed-element">
+                                            <a href="profile.html" class="pull-left">
+                                                <img alt="image" class="img-circle" src="/static/img/user.png">
+                                            </a>
+                                            <div class="media-body ">
+
+                                                <small class="pull-right">Nov. 8, 2016, 5:20 p.m.</small>
+                                                <strong>admin</strong> 登录了 <span class="text-navy">centos7. </span><br>
+                                                <small class="text-muted">2016-11-08 17:20:25</small>
+                                            </div>
+                                        </div>
+                                    
+                                        <div class="feed-element">
+                                            <a href="profile.html" class="pull-left">
+                                                <img alt="image" class="img-circle" src="/static/img/user.png">
+                                            </a>
+                                            <div class="media-body ">
+
+                                                <small class="pull-right">Nov. 8, 2016, 6:03 p.m.</small>
+                                                <strong>admin</strong> 登录了 <span class="text-navy">ubuntu. </span><br>
+                                                <small class="text-muted">2016-11-08 18:03:23</small>
+                                            </div>
+                                        </div>
+                                    
+                                    
+                                </div>
+                                
+                            </div>
+
+                            <div id="all" style="display: none">
+                                <div class="feed-activity-list" >
+                                    
+                                        <div class="feed-element">
+                                            <a href="profile.html" class="pull-left">
+                                                <img alt="image" class="img-circle" src="/static/img/user.png">
+                                            </a>
+                                            <div class="media-body ">
+                                                <small class="pull-right">Nov. 8, 2016, 5:20 p.m.</small>
+
+                                                <strong>admin</strong> 登录了 <span class="text-navy">centos7. </span><br>
+                                                <small class="text-muted">2016-11-08 17:20:25</small>
+                                            </div>
+                                        </div>
+                                    
+                                        <div class="feed-element">
+                                            <a href="profile.html" class="pull-left">
+                                                <img alt="image" class="img-circle" src="/static/img/user.png">
+                                            </a>
+                                            <div class="media-body ">
+                                                <small class="pull-right">Nov. 8, 2016, 6:03 p.m.</small>
+
+                                                <strong>admin</strong> 登录了 <span class="text-navy">ubuntu. </span><br>
+                                                <small class="text-muted">2016-11-08 18:03:23</small>
+                                            </div>
+                                        </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+
+<script>
+    $(document).ready(function(){
+        $('#show').click(function(){
+            $('#last').css('display', 'none');
+            $('#all').css('display', 'block');
+        })
+    })
+</script>
+
+
+
+            <div class="footer fixed">
+    <div class="pull-right">
+        Version <strong>0.3.2</strong> GPL.
+    </div>
+    <div>
+        <strong>Copyright</strong> Jumpserver.org Team &copy; 2014-2015
+    </div>
+</div>
+
+        </div>
+    </div>
+
+</body>
+    <!-- Mainly scripts -->
+<script src="/static/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+<script src="/static/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+<script src="/static/js/bootstrap-dialog.js"></script>
+<script src="/static/js/mindmup-editabletable.js"></script>
+<script src="/static/js/plugins/fullcalendar/moment.min.js"></script>
+<script src="/static/js/plugins/fullcalendar/fullcalendar.min.js"></script>
+
+<!-- Custom and plugin javascript -->
+<script src="/static/js/inspinia.js"></script>
+<script src="/static/js/plugins/pace/pace.min.js"></script>
+
+<!-- Peity -->
+<script src="/static/js/plugins/peity/jquery.peity.min.js"></script>
+
+<!-- Peity -->
+<script src="/static/js/demo/peity-demo.js"></script>
+
+<script src="/static/js/base.js"></script>
+
+<!-- pop windows layer-->
+<script src="/static/js/layer/layer.js"></script>
+
+<!-- highcharts -->
+<script src="/static/js/highcharts/highcharts.js"></script>
+
+
+<script src="/static/js/dropzone/dropzone.js"></script>
+<!-- active menu -->
+<script>
+    var url_array = document.location.pathname.split("/");
+    s1 = url_array[1];
+    s2 = url_array[2];
+    if (s1 == ''){
+        $('#index').addClass('active')
+    } else {
+        $("#"+s1).addClass('active');
+        $('#'+s1+' .'+s2).addClass('active');
+    }
+</script>
+
+     
+</html>
+

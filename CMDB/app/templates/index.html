@@ -9,98 +9,310 @@
                   </div>
                   {% include 'base1.html' %}
               </nav>
-            </div>
-            <div class="row" style='margin-top:20px'>
+              <div class="row" style='margin-top:20px'>
+                   <div class="col-lg-3 col-md-6">
+                      <div class="panel panel-primary">
+                          <div class="panel-heading">
+                              <div class="row">
+                                  <div class="col-xs-3">
+                                      <i class="fa fa-support fa-5x"></i>
+                                  </div>
+                                  <div class="col-xs-9 text-right">
+                                      <div class="huge">{{idc_num}}</div>
+                                      <div>IDC总数</div>
+                                  </div>
+                              </div>
+                          </div>
+                          <a href="/idc">
+                              <div class="panel-footer">
+                                  <span class="pull-left">查看全部</span>
+                                  <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                  <div class="clearfix"></div>
+                              </div>
+                          </a>
+                      </div>
+                  </div>
                  <div class="col-lg-3 col-md-6">
-                    <div class="panel panel-primary">
-                        <div class="panel-heading">
-                            <div class="row">
-                                <div class="col-xs-3">
-                                    <i class="fa fa-support fa-5x"></i>
-                                </div>
-                                <div class="col-xs-9 text-right">
-                                    <div class="huge">{{idc_num}}</div>
-                                    <div>IDC总数</div>
-                                </div>
-                            </div>
-                        </div>
-                        <a href="/idc">
-                            <div class="panel-footer">
-                                <span class="pull-left">查看全部</span>
-                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                <div class="clearfix"></div>
-                            </div>
-                        </a>
-                    </div>
+                      <div class="panel panel-primary">
+                          <div class="panel-heading">
+                              <div class="row">
+                                  <div class="col-xs-3">
+                                      <i class="fa fa-tasks fa-5x"></i>
+                                  </div>
+                                  <div class="col-xs-9 text-right">
+                                      <div class="huge">{{host_num}}</div>
+                                      <div>机器总数</div>
+                                  </div>
+                              </div>
+                          </div>
+                          <a href="/asset">
+                              <div class="panel-footer">
+                                  <span class="pull-left">查看全部</span>
+                                  <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                  <div class="clearfix"></div>
+                              </div>
+                          </a>
+                      </div>
+                  </div>
+                  <div class="col-lg-3 col-md-6">
+                      <div class="panel panel-primary">
+                          <div class="panel-heading">
+                              <div class="row">
+                                  <div class="col-xs-3">
+                                      <i class="fa fa-comments fa-5x"></i>
+                                  </div>
+                                  <div class="col-xs-9 text-right">
+                                      <div class="huge">2</div>
+                                      <div>任务编排</div>
+                                  </div>
+                              </div>
+                          </div>
+                          <a href="/job">
+                              <div class="panel-footer">
+                                  <span class="pull-left">查看全部</span>
+                                  <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                  <div class="clearfix"></div>
+                              </div>
+                          </a>
+                      </div>
+                  </div>
+                  <div class="col-lg-3 col-md-6">
+                      <div class="panel panel-primary">
+                          <div class="panel-heading">
+                              <div class="row">
+                                  <div class="col-xs-3">
+                                      <i class="fa fa-users fa-5x"></i>
+                                  </div>
+                                  <div class="col-xs-9 text-right">
+                                      <div class="huge">1</div>
+                                      <div>在线用户</div>
+                                  </div>
+                              </div>
+                          </div>
+                          <a href="#">
+                              <div class="panel-footer">
+                                  <span class="pull-left">{{login_user}}</span>
+                                  <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                  <div class="clearfix"></div>
+                              </div>
+                          </a>
+                      </div>
+                  </div>
                 </div>
-               <div class="col-lg-3 col-md-6">
-                    <div class="panel panel-primary">
-                        <div class="panel-heading">
-                            <div class="row">
-                                <div class="col-xs-3">
-                                    <i class="fa fa-tasks fa-5x"></i>
-                                </div>
-                                <div class="col-xs-9 text-right">
-                                    <div class="huge">{{host_num}}</div>
-                                    <div>机器总数</div>
-                                </div>
-                            </div>
-                        </div>
-                        <a href="/asset">
-                            <div class="panel-footer">
-                                <span class="pull-left">查看全部</span>
-                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                <div class="clearfix"></div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="panel panel-primary">
-                        <div class="panel-heading">
-                            <div class="row">
-                                <div class="col-xs-3">
-                                    <i class="fa fa-comments fa-5x"></i>
-                                </div>
-                                <div class="col-xs-9 text-right">
-                                    <div class="huge">2</div>
-                                    <div>任务编排</div>
-                                </div>
-                            </div>
-                        </div>
-                        <a href="/job">
-                            <div class="panel-footer">
-                                <span class="pull-left">查看全部</span>
-                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                <div class="clearfix"></div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="panel panel-primary">
-                        <div class="panel-heading">
-                            <div class="row">
-                                <div class="col-xs-3">
-                                    <i class="fa fa-users fa-5x"></i>
-                                </div>
-                                <div class="col-xs-9 text-right">
-                                    <div class="huge">1</div>
-                                    <div>在线用户</div>
-                                </div>
-                            </div>
-                        </div>
-                        <a href="#">
-                            <div class="panel-footer">
-                                <span class="pull-left">{{login_user}}</span>
-                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                <div class="clearfix"></div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-          </div>
-</div>
-</body>
-          {% include 'base2.html' %}
+
+              <div class="wrapper wrapper-content animated fadeInRight">
+                  <div class="row">
+                      <div class="col-sm-4">
+                          <div class="ibox float-e-margins">
+                              <div class="ibox-title">
+                                  <span class="label label-primary"><b>{{ login_user }}</b>
+                                  </span>
+                                  <div class="ibox-tools">
+                                      <a class="collapse-link">
+                                          <i class="fa fa-chevron-up"></i>
+                                      </a>
+                                      <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                          <i class="fa fa-wrench"></i>
+                                      </a>
+                                      <ul class="dropdown-menu dropdown-user">
+                                          <li><a href="#"></a>
+                                          </li>
+                                          <li><a href="#"></a>
+                                          </li>
+                                      </ul>
+                                      <a class="close-link">
+                                          <i class="fa fa-times"></i>
+                                      </a>
+                                  </div>
+                              </div>
+                              <div class="ibox-content">
+                                  <div>
+                                      <div class="text-left">
+                                          <table class="table">
+                                              <tr>
+                                                  <td class="text-navy">ID</td>
+                                                  <td>{{ userinfo.id }}</td>
+                                              </tr>
+                                              <tr>
+                                                  <td class="text-navy">用户名</td>
+                                                  <td>{{ login_user }}</td>
+                                              </tr>
+                                              <tr>
+                                                  <td class="text-navy">姓名</td>
+                                                  <td>{{ request.user }}</td>
+                                              </tr>
+                                              <tr>
+                                                  <td class="text-navy">权限</td>
+                                                  {% if userinfo.is_superuser %}
+                                                  <td>管理员</td>
+                                                  {% else %}
+                                                  <td>普通用户</td>
+                                                  {% endif %}
+                                              </tr>
+                                              <tr>
+                                                  <td class="text-navy">Email</td>
+                                                  <td>{{ userinfo.email }}</td>
+                                              </tr>
+                                              <tr>
+                                                  <td class="text-navy">激活</td>
+                                                  {% if userinfo.is_active %}
+                                                      <td>是</td>
+                                                  {% else %}
+                                                      <td>否</td>
+                                                  {% endif %}
+                                              </tr>
+                                              <tr>
+                                                  <td class="text-navy">添加日期</td>
+                                                  <td>{{ userinfo.date_joined }}</td>
+                                              </tr>
+                                              <tr>
+                                                  <td class="text-navy">最后登录</td>
+                                                  <td>{{ userinfo.last_login }}</td>
+                                              </tr>
+                                              <tr>
+                                                  <td class="text-navy">所在用户组</td>
+                                                  <td>{{ userinfo.group }}</td>
+                                                  <td>
+                                                       <table class="table">
+
+                                                       </table>
+                                                  </td>
+                                              </tr>
+                                          </table>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-sm-4">
+                          <div class="ibox float-e-margins">
+                              <div class="ibox-title">
+                                  <h5>授权主机/组</h5>
+                                  <div class="ibox-tools">
+                                      <a class="collapse-link">
+                                          <i class="fa fa-chevron-up"></i>
+                                      </a>
+                                      <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                          <i class="fa fa-wrench"></i>
+                                      </a>
+                                      <ul class="dropdown-menu dropdown-user">
+                                      </ul>
+                                      <a class="close-link">
+                                          <i class="fa fa-times"></i>
+                                      </a>
+                                  </div>
+                              </div>
+                              <div class="ibox-content ibox-heading">
+                                  <h3>用户的所有授权主机</h3>
+                                  <small><i class="fa fa-map-marker"></i> 这里包含了用户授权的主机和其映射的系统用户.</small>
+                              </div>
+                              <div class="ibox-content inspinia-timeline">
+
+
+                              </div>
+                          </div>
+                      </div>
+
+                      <div class="col-sm-4">
+                              <div class="ibox float-e-margins">
+                                  <div class="ibox-title">
+                                      <h5>最近登录</h5>
+                                      <div class="ibox-tools">
+                                          <span class="label label-warning-light">来源IP</span>
+                                         </div>
+                                  </div>
+                                  <div class="ibox-content">
+                                      <div id="last">
+
+                                          <div class="feed-activity-list" >
+                                                  {% for logininfo in login_info %}
+                                                  <div class="feed-element">
+                                                      <a href="profile.html" class="pull-left">
+                                                          <img alt="image" class="img-circle" src="/static/img/user.png">
+                                                      </a>
+                                                      <div class="media-body ">
+                                                          <small class="pull-right">{{ logininfo.ip }}</small>
+                                                          <strong>{{ login_user }}</strong> 登录 <span class="text-navy">成功</span><br>
+                                                          <small class="text-muted">{{ logininfo.loginTime }}</small>
+                                                      </div>
+                                                  </div>
+
+                                                  <!--div class="feed-element">
+                                                      <a href="profile.html" class="pull-left">
+                                                          <img alt="image" class="img-circle" src="/static/img/user.png">
+                                                      </a>
+                                                      <div class="media-body ">
+
+                                                          <small class="pull-right">Nov. 8, 2016, 6:03 p.m.</small>
+                                                          <strong>{{ login_user }}</strong> 登录了 <span class="text-navy">ubuntu. </span><br>
+                                                          <small class="text-muted">2016-11-08 18:03:23</small>
+                                                      </div>
+                                                  </div-->
+                                            {% endfor %}
+
+
+                                          </div>
+
+                                      </div>
+
+                                      <div id="all" style="display: none">
+                                          <div class="feed-activity-list" >
+
+                                                  <div class="feed-element">
+                                                      <a href="profile.html" class="pull-left">
+                                                          <img alt="image" class="img-circle" src="/static/img/user.png">
+                                                      </a>
+                                                      <div class="media-body ">
+                                                          <small class="pull-right">Nov. 8, 2016, 5:20 p.m.</small>
+
+                                                          <strong>admin</strong> 登录了 <span class="text-navy">centos7. </span><br>
+                                                          <small class="text-muted">2016-11-08 17:20:25</small>
+                                                      </div>
+                                                  </div>
+
+                                                  <div class="feed-element">
+                                                      <a href="profile.html" class="pull-left">
+                                                          <img alt="image" class="img-circle" src="/static/img/user.png">
+                                                      </a>
+                                                      <div class="media-body ">
+                                                          <small class="pull-right">Nov. 8, 2016, 6:03 p.m.</small>
+
+                                                          <strong>admin</strong> 登录了 <span class="text-navy">ubuntu. </span><br>
+                                                          <small class="text-muted">2016-11-08 18:03:23</small>
+                                                      </div>
+                                                  </div>
+
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+              </div>
+      </body>
+                {% include 'base2.html' %}
+      </html>
+
+<script>
+    $(document).ready(function(){
+        $('#show').click(function(){
+            $('#last').css('display', 'none');
+            $('#all').css('display', 'block');
+        })
+    })
+</script>
+
+<script>
+    var url_array = document.location.pathname.split("/");
+    s1 = url_array[1];
+    s2 = url_array[2];
+    if (s1 == ''){
+        $('#index').addClass('active')
+    } else {
+        $("#"+s1).addClass('active');
+        $('#'+s1+' .'+s2).addClass('active');
+    }
+</script>
+
+
 </html>
