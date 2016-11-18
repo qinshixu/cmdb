@@ -61,6 +61,7 @@
     <script src="/static/js/dropzone/dropzone.js"></script>
     <!-- active menu -->
 </head>
+<body>
 <div id="wrapper">
       <nav class="navbar-default navbar-static-side" role="navigation">
           <div class="sidebar-collapse">
@@ -102,10 +103,10 @@
                   <li id="asset">
                       <a><i class="fa fa-inbox"></i> <span class="nav-label">资产管理</span><span class="fa arrow"></span></a>
                       <ul class="nav nav-second-level">
-                        <li class="idc"> <a href="/idc">查看机房</a></li>
-                        <li class="asset"> <a href="/mac">主机列表<span class="label label-info pull-right"></span></a></li>
-                        <li class="group"><a href="/asset_auto">资产采集</a></li>
-                          <li class="group"><a href="/asset">查看资产</a></li>
+                        <li class="idc"> <a href="/idc/">查看机房</a></li>
+                        <li class="asset"> <a href="/mac/">主机列表<span class="label label-info pull-right"></span></a></li>
+                        <li class="group"><a href="/asset_auto/">资产采集</a></li>
+                          <li class="group"><a href="/asset/">查看资产</a></li>
                       </ul>
                   </li>
                   <li id="jperm">
@@ -117,17 +118,16 @@
                   <li id="file">
                       <a href="#"><i class="fa fa-download"></i> <span class="nav-label">上传下载</span><span class="fa arrow"></span></a>
                       <ul class="nav nav-second-level">
-                          <li class="upload"><a href="/file">单机上传</a></li>
-                          <li class="upload"><a href="/groupfile">批量上传</a></li>
+                          <li class="upload"><a href="/file">文件上传</a></li>
                           <li class="download"><a href="/download">文件下载</a></li>
                       </ul>
                   </li>
                   <li id="command">
                       <a href="/"><i class="fa fa-inbox"></i> <span class="nav-label">远程操作</span><span class="fa arrow"></span></a>
                       <ul class="nav nav-second-level">
-                          <li class="upload"><a href="/command">单台命令</a></li>
+                          <li class="upload"><a href="/command/">单台命令</a></li>
                           <li class="download"><a href="/index">运行状态</a></li>
-                          <li class="download"><a href="/oprationfile">文件处理</a></li>
+                          <li class="download"><a href="/oprationfile/">文件处理</a></li>
                           <li class="mac_opration"><a href="/service">服务操作</a></li>
                       </ul>
                     </li>
@@ -135,6 +135,7 @@
                         <a href="/"><i class="fa fa-inbox"></i> <span class="nav-label">批量操作</span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li class="commandgroup"><a href="/command_group">批量命令</a></li>
+                            <li class="upload"><a href="/groupfile">批量上传</a></li>
                         </ul>
                       </li>
                   <li id="UserManager">
@@ -154,4 +155,3 @@
 
           </div>
       </nav>
-</html>

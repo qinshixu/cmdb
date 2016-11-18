@@ -141,12 +141,12 @@ def addidc(request):
         idc_name_list.append(i.idc_name)
 #    print idc_name_list
     if nameInput in idc_name_list:
-        logger.error(str(request.user) + ' - ' +'idc name'+' '+nameInput +' - '+'exists!')
+        logger.error(str(request.user) + ' - ' +'idc name'+' '+str(nameInput) +' - '+'exists!')
         return HttpResponse('exist')
     else:
         idc_add = Idc(idc_name=nameInput,remark=msgInput)
         idc_add.save()
-        logger.info( str(request.user)+ ' - '+'add idc name '+nameInput)
+        logger.info( str(request.user)+ ' - '+'add idc name '+str(nameInput)+'success')
         return HttpResponse('ok')
 
 @login_required
@@ -186,6 +186,13 @@ def addmac(request):
         mac_add.save()
         logger.info(str(request.user)+' - '+'addmac'+ ' - '+str(name)+'-'+str(ip)+'-'+str(idc_name)+'-'+str(service)+'-'+str(idc_bh))
         return HttpResponse('ok')
+@login_required
+def check_host(request):
+    if request.method == 'GET':
+        idc_name = request.GET['idc_name']
+        all_host = HostList.objects.filter(idc_name=idc_name)
+        print idc_name
+        return render_to_response("mac.html",locals())
 @login_required
 def mac_delete(request,id=None):
     if request.method == 'GET':
@@ -256,7 +263,7 @@ def download_result(request):
 class UploadForm(forms.Form):
     headImg = forms.FileField()
 @login_required
-def file(request):
+def upfile(request):
 #    if request.method == 'POST':
     all_host = HostList.objects.all()
     all_file = Upload.objects.all()

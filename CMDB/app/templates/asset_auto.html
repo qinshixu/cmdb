@@ -209,7 +209,7 @@ function asset_auto_result(ele){
    if($('#client').val()){
      var id=$(ele).attr("id");
   $.ajax({
-    url:"/asset_auto_result",
+    url:"/asset_auto_result/",
     data:{client:$('#client').val()},
     success:function(data){
         if (data!='ok') {

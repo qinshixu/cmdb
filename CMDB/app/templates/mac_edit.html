@@ -227,7 +227,7 @@ function macresult(ele){
    if($('#bianhao').val()&&$('#name').val()&&$('#ip').val()&&$('#idc_jg').val()&&$('#idc_name').val()&&$('#service').val()){
      var id=$(ele).attr("id");
   $.ajax({
-    url:"/macresult",
+    url:"/macresult/",
     data:{id:$('#bianhao').val(),name:$('#name').val(),ip:$('#ip').val(),idc_jg:$('#idc_jg').val(),idc_name:$('#idc_name').val(),service:$('#service').val()},
     success:function(data){
      if (data=='ok') {

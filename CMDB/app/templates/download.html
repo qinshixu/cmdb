@@ -46,6 +46,18 @@
       &nbsp;{{ ret }}</p>
   </div>
   </div>
+  <!--
+  <div class="form-group">
+    <label for="inputPassword3" class="col-sm-2 control-label">推送目录</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id='dir' placeholder="写全目录和文件名如：/tmp/1.txt">
+    </div>
+  </div>-->
+    <!--
+      <div class="modal-footer" style="width:50%">
+        <button type="button" class="btn btn-primary"  onclick="command_result(this);" >确认</button>
+   </div>
+    -->
       <div style="width:150%">
   <button type="submit" class="btn btn-primary">下载</button>
 
@@ -99,5 +111,21 @@
     </script>
 
 <script type="text/javascript">
+function download(ele){
+   if($('#host_ip').val()&&$('#dir').val()){
+  $.ajax(
+    {
+    url:"/download_result",
+    data:{host_ip:$('#host_ip').val(),dir:$('#dir').val()},
+    success:function(data){
 
+      }
+
+});
+}
+    else {
+        $('#error').html('*请输入文件路径*')
+
+    }
+}
 </script>

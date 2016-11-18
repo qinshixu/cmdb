@@ -276,7 +276,7 @@ function cmdrun(ele){
    if($('#nameInput').val()&&$('#msgInput').val()){
      var id=$(ele).attr("id");
   $.ajax({
-    url:"/addidc",
+    url:"/addidc/",
     data:{nameInput:$('#nameInput').val(),msgInput:$('#msgInput').val()},
     success:function(data){
      if (data=='ok') {
