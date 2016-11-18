@@ -201,7 +201,7 @@ function addgroup_host(ele){
      if ($('#nameInput').val()&&$('#hostInput').val()){
          var id=$(ele).attr("id");
          $.ajax({
-             url:"/addgroup_host",
+             url:"/addgroup_host/",
              data:{nameInput:$('#nameInput').val(),hostInput:$('#hostInput').val()},
              success:function(data){
              if (data=='ok') {
