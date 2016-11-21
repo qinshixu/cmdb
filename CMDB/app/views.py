@@ -87,6 +87,10 @@ def get_clinet_ip(request):
     except:
         regip = request.META['REMOTE_ADDR']
     return regip
+def logout(request):
+    session_key = request.session.session_key
+    auth.logout(request)
+    return render_to_response("login.html")
 def login(request):
     return render_to_response("login.html")
 def authin(request):
