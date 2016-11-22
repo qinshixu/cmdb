@@ -14,6 +14,10 @@ import MySQLdb as mysql,datetime
 import  ConfigParser,sys,json,os,time,pickle
 import salt.client
 import logging
+from app.page import  pages
+from django.db.models import Q
+
+
 
 
 
@@ -758,3 +762,21 @@ def result_passwd(request):
         else:
             logger.error(str(request.user)+' - '+'ChangePassword'+ ' - Password error!')
             return HttpResponse('False')
+def log_list_offline(request,offset=''):
+    if request.method == 'GET':
+        Login_Info = Login_Record.objects.all().order_by('-id')[0:99]
+        contact_list,p, contacts, page_range, current_page, show_first, show_end=pages(Login_Info,request)
+        return render_to_response('log_list_offline.html', locals())
+def log_list_cmd(request):
+    return render_to_response('log_list_cmd.html')
+def log_list_file(request):
+    return render_to_response('log_list_file.html')
+def log_search(request):
+    keyword = request.POST['keyword']
+    offset = request.POST['offset']
+    print keyword,offset
+    if offset == 'offline':
+        print '123'
+        Login_Info = Login_Record.objects.filter(Q(name__icontains=keyword) | Q(ip__icontains=keyword))
+        contact_list,p, contacts, page_range, current_page, show_first, show_end=pages(Login_Info,request)
+        return render_to_response('log_list_%s.html' % offset, locals())
