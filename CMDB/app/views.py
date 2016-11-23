@@ -794,5 +794,10 @@ def log_search(request):
     if offset == 'offline':
         Login_Info = Login_Record.objects.filter(Q(name__icontains=keyword) | Q(ip__icontains=keyword))
         contact_list,p, contacts, page_range, current_page, show_first, show_end=pages(Login_Info,request)
-
-        return render_to_response('log_list_%s.html' % offset, locals())
+    if offset == 'file':
+        file_record = File_Record.objects.filter(Q(hostname__icontains=keyword) | Q(name__icontains=keyword) | Q(filename__icontains=keyword) | Q(ip__icontains=keyword) | Q(file_type__icontains=keyword))
+        contact_list,p, contacts, page_range, current_page, show_first, show_end=pages(file_record,request)
+    if offset == 'cmd':
+        cmd_info = cmd_record.objects.filter(Q(hostname__icontains=keyword) | Q(name__icontains=keyword) |Q(ip__icontains=keyword) | Q(cmd__icontains=keyword))
+        contact_list,p, contacts, page_range, current_page, show_first, show_end=pages(cmd_info,request)
+    return render_to_response('log_list_%s.html' % offset, locals())
