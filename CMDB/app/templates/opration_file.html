@@ -48,21 +48,21 @@
                                     </thead>
                                     <tbody>
 
-         {%for k,v in files.items%}
+{%for k,v in files.items%}
 <tr>
   <td class="filename"> {{ k }}</td>
-  <td id="filetime"> {{v}} </td>
+  <td id="filesize"> {{ v }} </td>
   <td>
   <span class="btn btn-xs btn-primary" data-id='6'>
     <a style='color:white' onclick="check_file(this);">
-        <input type="hidden" value={{k}} class='filename'>查看</a>
+        <input type="hidden" value={{ k }} class='filename'>查看</a>
 </span>&nbsp;
 <span  class="btn btn-xs btn-primary" data-id='6'>
 <a style='color:white' onclick="downfile(this)">
-<form style="display:hidden"  method="post" action="/download_result/" id="thisForm">
+<form style="display:hidden"  method="post" action="/download_result/" class="thisForm">
+<input type="hidden" value={{ k }} name='filename'>
 <input type="hidden" value={{ hostname }} name='hostname'>
 <input type="hidden" value={{ path }} name='path'>
-<input type="hidden" value={{ k }} name='filename'>
 </form>
 下载</a>
 </span>
@@ -187,6 +187,6 @@ function down_file(ele){
 });
 }
 function downfile(ele){
-    $('#thisForm').submit()
+    $(ele).find('.thisForm').submit()
 }
 </script>

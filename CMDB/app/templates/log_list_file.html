@@ -10,30 +10,11 @@
                   {% include 'base1.html' %}
               </nav>
             </div>
-            <div class="row wrapper border-bottom white-bg page-heading">
-                <div class="col-sm-10">
-                    <h2>审计</h2>
-                    <ol class="breadcrumb">
-                        <li>
-                            <a href="/">仪表盘</a>
-                        </li>
-                        <li>
-
-                            <a>操作审计</a>
-
-                        </li>
-
-                    </ol>
-                </div>
-                <div class="col-sm-2">
-                </div>
-            </div>
-            <div class="wrapper wrapper-content animated fadeInRight">
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="ibox float-e-margins">
                             <div id="ibox-content" class="ibox-title">
-                                <h5> 批量命令日志 </h5>
+                                <h5> 登录历史记录 </h5>
                                 <div class="ibox-tools">
                                     <a class="collapse-link">
                                         <i class="fa fa-chevron-up"></i>
@@ -52,13 +33,14 @@
                                     <ul class="nav nav-tabs">
                                         <li><a href="/log/list/offline/" class="text-center"><i class="fa fa-bar-chart-o"></i> 登录历史</a></li>
                                         <li><a href="/log/list/cmd/" class="text-center"><i class="fa fa-bar-chart-o"></i> 命令记录 </a></li>
-                                        <li  class="active"><a href="/log/list/file/" class="text-center"><i class="fa fa-bar-chart-o"></i> 上传下载 </a></li>
+                                        <li class="active"><a href="/log/list/file/" class="text-center"><i class="fa fa-bar-chart-o"></i> 上传下载 </a></li>
                                         <div class="" style="float: right">
-                                            <form id="search_form" method="get" action="" class="pull-right mail-search">
+                                            <form id="search_form" method="POST" action="/log/search/" class="pull-right mail-search">
                                                 <div class="input-group">
                                                     <input type="text" class="form-control input-sm" id="keyword" name="keyword" value="{{ keyword }}" placeholder="Search">
+                                                    <input type="hidden" class="form-control input-sm" name="offset" value="offline" >
                                                     <div class="input-group-btn">
-                                                        <button id='search_btn' type="submit" class="btn btn-sm btn-primary">
+                                                        <button  type=submit class="btn btn-sm btn-primary">
                                                             -搜索-
                                                         </button>
                                                     </div>
@@ -72,28 +54,27 @@
                                         <thead>
                                             <tr>
                                                 <th class="text-center"> ID </th>
-                                                <th class="text-center"> 用户名 </th>
                                                 <th class="text-center"> 主机 </th>
-                                                <th class="text-center"> 文件 </th>
-                                                <th class="text-center"> 类型 </th>
+                                                <th class="text-center"> 用户名 </th>
+                                                <th class="text-center"> 文件名 </th>
+                                                <th class="text-center"> 来源IP </th>
                                                 <th class="text-center"> 时间 </th>
-                                                <th class="text-center"> 状态 </th>
+                                                <th class="text-center"> 类型 </th>
 
                                             </tr>
                                         </thead>
                                         <tbody>
 
-                                        {% for post in contact_list %}
+                                        {% for cmdinfo in contacts.object_list %}
                                             <tr class="gradeX">
-                                                <td class="text-center"> {{ post.id }} </td>
-                                                <td class="text-center username"> {{ post.user }} </td>
-                                                <td class="text-center ip"> {{ post.host | truncatechars:30 }} </td>
-                                                <td class="text-center ip"> {{ post.cmd | truncatechars:30 }} </td>
-                                                <td class="text-center remote_ip"> {{ post.remote_ip }} </td>
-                                                <td class="text-center start_time"> {{ post.datetime|date:"Y-m-d H:i:s"}} </td>
-                                                <td class="text-center">
-                                                    <a href="{% url 'log_detail' 'exec' %}?id={{ post.id }}" class="btn btn-xs btn-primary">详情</a>
-                                                </td>
+                                                <td class="text-center"> {{ cmdinfo.id }} </td>
+                                                <td class="text-center hostname"> {{ cmdinfo.hostname }} </td>
+                                                <td class="text-center username"> {{ cmdinfo.name }} </td>
+                                                <td class="text-center filename"> {{ cmdinfo.filename }} </td>
+                                                <td class="text-center ip"> {{ cmdinfo.ip }} </td>
+                                                <td class="text-center start_time"> {{ cmdinfo.start_time|date:"Y-m-d H:i:s"  }} </td>
+                                                <td class="text-center filetype ">{{ cmdinfo.file_type }}  </td>
+
                                             </tr>
                                         {% endfor %}
                                         </tbody>
@@ -108,20 +89,8 @@
                         </div>
                     </div>
                 </div>
-            </div>
+
             {% include 'base2.html' %}
                 </div>
             </div>
-
-            <script>
-                function log_search(){
-                    $.ajax({
-                        type: "GET",
-                        url: "/jlog/search/?env=offline",
-                        data: $("#search_form").serialize(),
-                        success: function (data) {
-                            $(".tab-content").html(data);
-                        }
-                    });
-                }
-            </script>
+</html>

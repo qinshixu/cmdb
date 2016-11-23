@@ -10,30 +10,11 @@
                   {% include 'base1.html' %}
               </nav>
             </div>
-            <div class="row wrapper border-bottom white-bg page-heading">
-                <div class="col-sm-10">
-                    <h2>审计</h2>
-                    <ol class="breadcrumb">
-                        <li>
-                            <a href="/">仪表盘</a>
-                        </li>
-                        <li>
-
-                            <a>操作审计</a>
-
-                        </li>
-
-                    </ol>
-                </div>
-                <div class="col-sm-2">
-                </div>
-            </div>
-            <div class="wrapper wrapper-content animated fadeInRight">
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="ibox float-e-margins">
                             <div id="ibox-content" class="ibox-title">
-                                <h5> 批量命令日志 </h5>
+                                <h5> 登录历史记录 </h5>
                                 <div class="ibox-tools">
                                     <a class="collapse-link">
                                         <i class="fa fa-chevron-up"></i>
@@ -50,9 +31,9 @@
                             <div class="ibox-content">
                                 <div class="panel-options">
                                     <ul class="nav nav-tabs">
-                                        <li  class="active"><a href="/log/list/offline/" class="text-center"><i class="fa fa-bar-chart-o"></i> 登录历史</a></li>
+                                        <li  class="active"><a href="/log/list/offline/" class="text-center"><i class="fa fa-laptop"></i> 登录历史</a></li>
                                         <li><a href="/log/list/cmd/" class="text-center"><i class="fa fa-bar-chart-o"></i> 命令记录 </a></li>
-                                        <li><a href="/log/list/file/" class="text-center"><i class="fa fa-bar-chart-o"></i> 上传下载 </a></li>
+                                        <li><a href="/log/list/file/" class="text-center"><i class="fa fa-inbox"></i> 上传下载 </a></li>
                                         <div class="" style="float: right">
                                             <form id="search_form" method="POST" action="/log/search/" class="pull-right mail-search">
                                                 <div class="input-group">
@@ -107,20 +88,8 @@
                         </div>
                     </div>
                 </div>
-            </div>
+
             {% include 'base2.html' %}
                 </div>
             </div>
-
-            <script>
-                function log_search(){
-                    $.ajax({
-                        type: "GET",
-                        url: "/log/search/?env=offline",
-                        data: $("#search_form").serialize(),
-                        success: function (data) {
-                            $(".tab-content").html(data);
-                        }
-                    });
-                }
-            </script>
+</html>

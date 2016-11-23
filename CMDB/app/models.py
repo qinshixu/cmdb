@@ -72,15 +72,38 @@ class Upload(models.Model):
     class Meta:
 	verbose_name = u'文件上传'
         verbose_name_plural = u'文件上传'
+class File_Record(models.Model):
+    hostname = models.CharField(max_length=30, verbose_name=u'主机名')
+    name = models.CharField(max_length=40, verbose_name=u'操作用户')
+    filename = models.CharField(max_length=30, verbose_name=u'文件名')
+    ip = models.IPAddressField(verbose_name=u'IP地址')
+    start_time = models.DateTimeField(auto_now=True, verbose_name=u'操作时间')
+    file_type = models.CharField(max_length=20)
+    def __unicode__(self):
+        return self.name
+    class Meta:
+        verbose_name=u'主机名'
+        verbose_name=u'操作用户'
 class cmd_run(models.Model):
     ip = models.IPAddressField(verbose_name=u'IP地址')
     command = models.CharField(max_length=30, verbose_name=u'命令')
     track_mark = models.IntegerField()
     def __unicode__(self):
-	return self.ip
+	       return self.ip
     class Meta:
-	verbose_name = u'命令管理'
-	verbose_name_plural = u'命令管理'
+        verbose_name = u'命令管理'
+        verbose_name_plural = u'命令管理'
+class cmd_record(models.Model):
+    hostname = models.CharField(max_length=30, verbose_name=u'主机名')
+    name = models.CharField(max_length=40, verbose_name=u'操作用户')
+    ip = models.IPAddressField(verbose_name=u'IP地址')
+    cmd = models.CharField(max_length=100)
+    start_time = models.DateTimeField(auto_now=True, verbose_name=u'操作时间')
+    def __unicode__(self):
+        return self.cmd
+    class Meta:
+        verbose_name=u'主机名'
+        verbose_name=u'操作用户'
 class salt_return(models.Model):
    fun = models.CharField(max_length=50)
    jid = models.CharField(max_length=255)

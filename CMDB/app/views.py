@@ -259,6 +259,9 @@ def download_result(request):
             filename = fullpath.split('/')[-1]
             response = HttpResponse(data,mimetype='application/octet-stream')
             response['Content-Disposition'] = 'attachment; filename=%s' %filename
+            real_ip = get_clinet_ip(request)
+            file_record = File_Record(hostname=hostname,name=request.user,filename=filepath,ip=real_ip,file_type='download')
+            file_record.save()
             return response
         else:
             all_host = HostList.objects.all()
@@ -284,6 +287,8 @@ def upfile(request):
 def file_result(request):
     hostname = request.GET.get('hostname')
     salt_file = request.GET.get('file')
+    filename = salt_file.split('/')[-1]
+    print filename
     mini_dest = request.GET.get('dir')
     ret=client.cmd(hostname,'cp.get_file',['salt:/'+salt_file,mini_dest])
     print ret
@@ -294,6 +299,9 @@ def file_result(request):
         if  mini_dest in ret[hostname]:
             print '上传成功'
             result = {'mes':"推送成功"}
+            real_ip= get_clinet_ip(request)
+            file_record = File_Record(hostname=hostname,name=request.user,filename=filename,ip=real_ip,file_type='upload')
+            file_record.save()
             return HttpResponse(json.dumps(result))
     else:
         print '上传失败'
@@ -394,6 +402,9 @@ def command_result(request):
                 ret=ret[i][key_id]
 	        r_data = {'host':key_id,'ret':ret}
             data = json.dumps(r_data)
+            real_ip = get_clinet_ip(request)
+            Cmd_Record = cmd_record(hostname=key_id,name=request.user,ip=real_ip,cmd=command)
+            Cmd_Record.save()
             return HttpResponse(data)
         except:
             print '123'
@@ -414,7 +425,7 @@ def command_group_result(request):
         project_success = []
 	project_fail = []
         GroupList = Group.objects.all()
-        salt_return.objects.filter().delete()
+#        salt_return.objects.filter().delete()
         for groupname in GroupList:
             if groupname.name in g_name:
                 print "slected group:",groupname.name
@@ -762,21 +773,26 @@ def result_passwd(request):
         else:
             logger.error(str(request.user)+' - '+'ChangePassword'+ ' - Password error!')
             return HttpResponse('False')
-def log_list_offline(request,offset=''):
+def log_list_offline(request):
     if request.method == 'GET':
         Login_Info = Login_Record.objects.all().order_by('-id')[0:99]
         contact_list,p, contacts, page_range, current_page, show_first, show_end=pages(Login_Info,request)
         return render_to_response('log_list_offline.html', locals())
 def log_list_cmd(request):
-    return render_to_response('log_list_cmd.html')
+    if request.method == 'GET':
+        cmd_info = cmd_record.objects.all().order_by('-id')[0:99]
+        contact_list,p, contacts, page_range, current_page, show_first, show_end=pages(cmd_info,request)
+        return render_to_response('log_list_cmd.html',locals())
 def log_list_file(request):
-    return render_to_response('log_list_file.html')
+    if request.method == 'GET':
+        file_record = File_Record.objects.all().order_by('-id')[0:99]
+        contact_list,p, contacts, page_range, current_page, show_first, show_end=pages(file_record,request)
+        return render_to_response('log_list_file.html',locals())
 def log_search(request):
     keyword = request.POST['keyword']
     offset = request.POST['offset']
-    print keyword,offset
     if offset == 'offline':
-        print '123'
         Login_Info = Login_Record.objects.filter(Q(name__icontains=keyword) | Q(ip__icontains=keyword))
         contact_list,p, contacts, page_range, current_page, show_first, show_end=pages(Login_Info,request)
+
         return render_to_response('log_list_%s.html' % offset, locals())
