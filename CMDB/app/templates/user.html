@@ -264,7 +264,7 @@ function useradd(ele){
 if($('#username').val()&&$('#password').val()&&$('#password2').val()&&$('#emailaddr').val()&&$('#active').val()){
   if($('#password').val() == $('#password2').val()){
 $.ajax({
-url:"/adduser",
+url:"/adduser/",
 data:{username:$('#username').val(),email:$('#emailaddr').val(),password:$('#password').val(),is_active:$('#active').val()},
 success:function(data){
  if (data=='ok') {

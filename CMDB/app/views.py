@@ -82,7 +82,7 @@ def index(request):
     host_num = total_host["hostname__count"]
     login_user = request.user
     userinfo = User.objects.get(username=request.user)
-    login_info = Login_Record.objects.filter(status=1).order_by("-loginTime")[0:6]
+    login_info = Login_Record.objects.filter(status=1).filter(name=request.user).order_by("-loginTime")[0:6]
     return render_to_response("index.html",locals())
 def get_clinet_ip(request):
     try:
@@ -115,7 +115,7 @@ def authin(request):
                 total_host = HostList.objects.aggregate(Count('hostname'))
                 host_num = total_host["hostname__count"]
                 login_user = username
-                login_info = Login_Record.objects.filter(status=1).order_by("-loginTime")[0:6]
+                login_info = Login_Record.objects.filter(status=1).filter(name=request.user).order_by("-loginTime")[0:6]
                 logger.info(username +' - '+ real_ip + ' - login server' )
                 return  render_to_response('index.html',locals())
             else:
