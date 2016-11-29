@@ -16,10 +16,7 @@ import salt.client
 import logging
 from app.page import  pages
 from django.db.models import Q
-
-
-
-
+import csv
 
 #db = mysql.connect(user="root", passwd="123456", db="monitor", charset="utf8")
 #db.autocommit(True)
@@ -468,7 +465,43 @@ def job(request):
 @login_required
 def asset(request):
     all_asset = ServerAsset.objects.all()
+    contact_list,p, contacts, page_range, current_page, show_first, show_end=pages(all_asset,request)
     return render_to_response("asset.html",locals())
+@login_required
+def asset_download(request):
+    import codecs
+    asset_flag=['manufacturer','productname','service_tag','cpu_model','cpu_nums','cpu_groups','mem','disk','hostname','ip','os']
+    down_path_file='/tmp/'+'asset_'+ time.strftime('%Y-%m-%d_%H%M', time.localtime())+'.csv'
+    all_asset = ServerAsset.objects.all()
+    with open(down_path_file,'wb') as csvfile:
+        asset_title=['厂商','产品型号','序列号','cpu型号','cpu数','cpu核数','内存大小','硬盘大小','主机名','主机ip','操作系统']
+        csvfile.write(codecs.BOM_UTF8)
+        spamwriter = csv.writer(csvfile,dialect='excel')
+        spamwriter.writerow(asset_title)
+    for asset in all_asset:
+            asset_info=[]
+            asset_info.append(asset.manufacturer)
+            asset_info.append(asset.productname)
+            asset_info.append(asset.service_tag)
+            asset_info.append(asset.cpu_model)
+            asset_info.append(asset.cpu_nums)
+            asset_info.append(asset.cpu_groups)
+            asset_info.append(asset.mem)
+            asset_info.append(asset.disk)
+            asset_info.append(asset.hostname)
+            asset_info.append(asset.ip)
+            asset_info.append(asset.os)
+            with open(down_path_file,'a') as csvfile:
+                csvfile.write(codecs.BOM_UTF8)
+                spamwriter = csv.writer(csvfile,dialect='excel')
+                spamwriter.writerow(asset_info)
+    f=open(down_path_file)
+    data=f.read()
+    f.close()
+    filename = down_path_file.split('/')[-1]
+    response = HttpResponse(data,mimetype='application/octet-stream')
+    response['Content-Disposition'] = 'attachment; filename=%s' %filename
+    return response
 @login_required
 def asset_auto(request):
     all_host = HostList.objects.all()
