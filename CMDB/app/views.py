@@ -474,7 +474,7 @@ def asset_download(request):
     down_path_file='/tmp/'+'asset_'+ time.strftime('%Y-%m-%d_%H%M', time.localtime())+'.csv'
     all_asset = ServerAsset.objects.all()
     with open(down_path_file,'wb') as csvfile:
-        asset_title=['厂商','产品型号','序列号','cpu型号','cpu数','cpu核数','内存大小','硬盘大小','主机名','主机ip','操作系统']
+        asset_title=['厂商','产品型号','序列号','主机名','主机ip','操作系统','cpu型号','cpu核数','cpu数','内存大小','硬盘大小']
         csvfile.write(codecs.BOM_UTF8)
         spamwriter = csv.writer(csvfile,dialect='excel')
         spamwriter.writerow(asset_title)
@@ -483,14 +483,14 @@ def asset_download(request):
             asset_info.append(asset.manufacturer)
             asset_info.append(asset.productname)
             asset_info.append(asset.service_tag)
+            asset_info.append(asset.hostname)
+            asset_info.append(asset.ip)
+            asset_info.append(asset.os)
             asset_info.append(asset.cpu_model)
             asset_info.append(asset.cpu_nums)
             asset_info.append(asset.cpu_groups)
             asset_info.append(asset.mem)
             asset_info.append(asset.disk)
-            asset_info.append(asset.hostname)
-            asset_info.append(asset.ip)
-            asset_info.append(asset.os)
             with open(down_path_file,'a') as csvfile:
                 csvfile.write(codecs.BOM_UTF8)
                 spamwriter = csv.writer(csvfile,dialect='excel')
