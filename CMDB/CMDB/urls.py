@@ -4,7 +4,11 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 admin.autodiscover()
 from app.views import *
+import settings
 urlpatterns = patterns('',
+    (r'^static/(?P<path>.*)$', 'django.views.static.serve',
+            {'document_root':  settings.STATIC_ROOT}
+    ),
     # Examples:
     # url(r'^$', 'CMDB.views.home', name='home'),
     # url(r'^CMDB/', include('CMDB.foo.urls')),
