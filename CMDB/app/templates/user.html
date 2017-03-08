@@ -47,9 +47,14 @@
             	<td id="last_login">{{userinfo.last_login}}</td>
             	<td id="date_joined">{{userinfo.date_joined}}</td>
             	<td>
-            <span class=" btn btn-xs btn-primary" onclick="user_start({{ userinfo.id }});">启用</span>
-            <span class="btn btn-xs btn-warning" onclick="user_forbbid({{ userinfo.id }});">禁用</span>
-            <span class=" btn btn-xs btn-danger" onclick="user_del({{ userinfo.id }});">删除</span>
+                {% if userinfo.is_active %}
+                <span class=" btn btn-xs btn-default" data-dismiss="modal" onclick="user_start({{ userinfo.id }});">启用</span>
+                <span class="btn btn-xs btn-warning" onclick="user_forbbid({{ userinfo.id }});">禁用</span>
+                {% else %}
+                <span class=" btn btn-xs btn-primary"  onclick="user_start({{ userinfo.id }});">启用</span>
+                <span class="btn btn-xs btn-default" data-dismiss="modal" onclick="user_forbbid({{ userinfo.id }});">禁用</span>
+                {% endif %}
+                <span class=" btn btn-xs btn-danger" onclick="user_del({{ userinfo.id }});">删除</span>
             	</td>
             </tr>
                  {%endfor%}
