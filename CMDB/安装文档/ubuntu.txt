@@ -107,7 +107,7 @@ device = eth0 ####因为不确定有些系统用的是eth0.有些用的是em。�
 ****备注上面是数据库的账号管理密码等，下面是salt-api的账号密码：
  8、数据库创建：
 python manage.py syncdb
-python manage.py migrate app
+python manage.py migrate
 备注：输入的账号密码是登录网站的账号密码：
 CREATE TABLE `app_login_record` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
