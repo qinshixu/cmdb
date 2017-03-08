@@ -701,6 +701,7 @@ def service_result(request):
 @login_required
 def user(request):
     all_user = User.objects.all()
+    contact_list,p, contacts, page_range, current_page, show_first, show_end=pages(all_user,request)
     return render_to_response("user.html",locals())
 @login_required
 def adduser(request):
@@ -834,3 +835,8 @@ def log_search(request):
         cmd_info = cmd_record.objects.filter(Q(hostname__icontains=keyword) | Q(name__icontains=keyword) |Q(ip__icontains=keyword) | Q(cmd__icontains=keyword))
         contact_list,p, contacts, page_range, current_page, show_first, show_end=pages(cmd_info,request)
     return render_to_response('log_list_%s.html' % offset, locals())
+def user_search(request):
+    keyword = request.POST['keyword']
+    User_info= User.objects.filter(Q(username__icontains=keyword) | Q(email__icontains=keyword) | Q(is_active__icontains=keyword))
+    contact_list,p, contacts, page_range, current_page, show_first, show_end=pages(User_info,request)
+    return render_to_response('user.html',locals())

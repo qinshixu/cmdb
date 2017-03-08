@@ -14,6 +14,19 @@
             <div class="row" style='margin-top:20px'>
             	<button class="btn btn-primary" id='addmacBtn' style='margin-left:20px'>添加用户</button>
             </div>
+            <div class="" style="float: right">
+                <form id="search_form" method="POST" action="/user_search/" class="pull-right mail-search">
+                    <div class="input-group">
+                        <input type="text" class="form-control input-sm" id="keyword" name="keyword" value="{{ keyword }}" placeholder="Search">
+                        <input type="hidden" class="form-control input-sm" name="offset" value="cmd" >
+                        <div class="input-group-btn">
+                            <button  type=submit class="btn btn-sm btn-primary">
+                                -搜索-
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
 
             <div class="row">
                             <div class="col-lg-12">
@@ -39,7 +52,7 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                 {%for userinfo in all_user %}
+                 {%for userinfo in contacts.object_list %}
             <tr>
             	<td id="user">{{userinfo.username}}</td>
             	<td id="email">{{userinfo.email}}</td>
@@ -61,6 +74,11 @@
 
                 </tbody>
                 </table>
+                <div class="row">
+                    <div class="col-sm-6">
+                    </div>
+                    {% include 'paginator.html' %}
+                </div>
 
                                         </div>
                                         <!-- /.table-responsive -->
