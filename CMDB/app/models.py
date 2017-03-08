@@ -75,7 +75,7 @@ class Upload(models.Model):
 class File_Record(models.Model):
     hostname = models.CharField(max_length=30, verbose_name=u'主机名')
     name = models.CharField(max_length=40, verbose_name=u'操作用户')
-    filename = models.CharField(max_length=30, verbose_name=u'文件名')
+    filename = models.CharField(max_length=300, verbose_name=u'文件名')
     ip = models.IPAddressField(verbose_name=u'IP地址')
     start_time = models.DateTimeField(auto_now=True, verbose_name=u'操作时间')
     file_type = models.CharField(max_length=20)
